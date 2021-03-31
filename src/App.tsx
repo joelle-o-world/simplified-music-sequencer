@@ -6,6 +6,8 @@ import Sequencer from './features/sequencer/Sequencer';
 function App() {
   return (
     <div className="App">
+      <article className="friendly-text">
+      </article>
       <Sequencer />
     </div>
   );
