@@ -13,6 +13,7 @@ export const PianoKeyboard: FunctionComponent<{
   hotKeys?: string[];
   hotKeyOffset?: number
   highlightKeys?: number[];
+  labelKeys?: boolean;
   onNote?: (e:{
     pitchNumber: number;
     p: number;
@@ -20,7 +21,7 @@ export const PianoKeyboard: FunctionComponent<{
     fullName: string;
     octave: number;
   }) => void;
-}> = ({numberOfKeys=15, octave=1, hotKeys=defaultHotKeys, hotKeyOffset=0, onNote, highlightKeys=[]}) => {
+}> = ({numberOfKeys=15, octave=1, hotKeys=defaultHotKeys, hotKeyOffset=0, onNote, highlightKeys=[], labelKeys=false,}) => {
 
 
   useEffect( () => {
@@ -75,7 +76,7 @@ export const PianoKeyboard: FunctionComponent<{
       onMouseDown={handlePress} 
       key={i} 
       className={classNames(keyName, {highlighted})}
-    >{hotKey || ' '}</button>
+    >{labelKeys ? fullName : (hotKey || ' ')}</button>
 
     if(black)
       blackNotes.push(btn)

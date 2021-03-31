@@ -10,7 +10,7 @@ import classNames from 'classnames'
 import './Sequencer.sass'
 
 // TODO: Replace this function with time signature variable
-const printTime = (t:number) => t%2 ? 'and' : String(Math.floor(t/2)%8 + 1);
+const printTime = (t:number) => t%2 ? 'and' : String(Math.floor(t/2)%4 + 1);
 
 export const Sequencer: FunctionComponent = () => {
   const sequencer = useSelector(selectSequencer);
@@ -30,7 +30,7 @@ export const Sequencer: FunctionComponent = () => {
       <button onClick={handlePlay}>Play</button>
       <div className="SequencerTempo">
         <label>Tempo:</label>
-        <input type="range" min="50" max="1400" value={sequencer.tempo} onChange={e => dispatch(setTempo(Number(e.target.value)))} />
+        <input type="range" min="50" max="400" value={sequencer.tempo} onChange={e => dispatch(setTempo(Number(e.target.value)))} />
         <span>{sequencer.tempo}bpm</span>
       </div>
     </div>

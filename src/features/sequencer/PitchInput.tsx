@@ -54,6 +54,7 @@ export const PitchInput: FunctionComponent<PitchInputProps> = ({
           hotKeys={[]} 
           onNote = { e => handleChange(e.fullName) }
           highlightKeys={internalParse.midiNumber ? [internalParse.midiNumber] : [] }
+          labelKeys
         />
       : null}
   </div>
