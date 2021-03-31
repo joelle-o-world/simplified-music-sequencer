@@ -50,10 +50,14 @@ export const sequencerSlice = createSlice({
       for(let i=0; i < action.payload; ++i)
         state.steps.push(parsePitch(''));
     },
+
+    setTempo: (state, action: PayloadAction<number>) => {
+      state.tempo = action.payload;
+    }
   },
 })
 
-export const {setNote, clearNote, addSteps} = sequencerSlice.actions;
+export const {setNote, clearNote, addSteps, setTempo} = sequencerSlice.actions;
 
 export const selectSequencer = (state: RootState) => state.sequencer;
 

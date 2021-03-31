@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {FunctionComponent} from "react";
 import {useSelector, useDispatch} from 'react-redux';
-import {selectSequencer, setNote, addSteps} from './sequencerSlice';
+import {selectSequencer, setNote, addSteps, setTempo} from './sequencerSlice';
 import {PitchParse} from './parsePitch';
 import PitchInput from './PitchInput';
 import {Synth} from './synth';
@@ -9,7 +9,7 @@ import classNames from 'classnames'
 
 import './Sequencer.sass'
 
-// TODO: Replace this function with time signature context
+// TODO: Replace this function with time signature variable
 const printTime = (t:number) => t%2 ? 'and' : String(Math.floor(t/2)%8 + 1);
 
 export const Sequencer: FunctionComponent = () => {
@@ -25,8 +25,15 @@ export const Sequencer: FunctionComponent = () => {
     });
   }
 
-  return <div className="Sequencer">
-    <button onClick={handlePlay}>Play</button>
+  return <div className="Sequencer horizontal">
+    <div className="SequencerControls">
+      <button onClick={handlePlay}>Play</button>
+      <div className="SequencerTempo">
+        <label>Tempo:</label>
+        <input type="range" min="50" max="400" value={sequencer.tempo} onChange={e => dispatch(setTempo(Number(e.target.value)))} />
+        <span>{sequencer.tempo}bpm</span>
+      </div>
+    </div>
     <div className="Sequencer_Steps">
       {sequencer.steps.map((step, i) => ( 
         <SequencerStep 
