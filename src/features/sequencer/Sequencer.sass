@@ -1,0 +1,27 @@
+.Sequencer
+  display: flex
+  flex-direction: column
+  align-items: center
+  .Sequencer_Steps
+    display: flex
+    flex-direction: column
+    .SequencerStep
+      display: flex
+      flex-direction: row
+      align-items: center
+      .SequencerStep_TimeIndex
+        display: block
+        width: 40px
+        font-size: 11px
+        text-align: center
+      .SequencerStep_input
+        width: 1.5em
+        height: 1.5em
+        text-align: center
+        font-size: 25px
+        &.hasPitch
+          border: 1px solid green
+          background-color: #ccffcc
+        &.hasError
+          border: 1px solid red
+          background-color: #ffcccc
