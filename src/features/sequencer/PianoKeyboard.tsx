@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {FunctionComponent, useEffect} from 'react';
+import classNames from 'classnames';
 
 import './PianoKeyboard.sass';
 
@@ -11,14 +12,15 @@ export const PianoKeyboard: FunctionComponent<{
   octave?: number;
   hotKeys?: string[];
   hotKeyOffset?: number
+  highlightKeys?: number[];
   onNote?: (e:{
     pitchNumber: number;
     p: number;
     pitchName: string;
     fullName: string;
     octave: number;
-  }) => void
-}> = ({numberOfKeys=15, octave=1, hotKeys=defaultHotKeys, hotKeyOffset=0, onNote}) => {
+  }) => void;
+}> = ({numberOfKeys=15, octave=1, hotKeys=defaultHotKeys, hotKeyOffset=0, onNote, highlightKeys=[]}) => {
 
 
   useEffect( () => {
@@ -30,14 +32,15 @@ export const PianoKeyboard: FunctionComponent<{
 
           let pitch = index + hotKeyOffset + octave * 12
           let keyName = keyNames[index % 12]
-          let fullName = keyName + octave;
+          let actualOctave = octave + Math.floor(index/12)
+          let fullName = keyName + actualOctave;
           if(onNote)
             onNote({
               p: pitch,
               pitchNumber: pitch,
               pitchName: keyName,
-              octave,
               fullName,
+              octave: actualOctave
             })
         }
       }
@@ -53,7 +56,8 @@ export const PianoKeyboard: FunctionComponent<{
     const keyName = keyNames[i % 12]
     const black = /[b#]$/.test(keyName)
     const hotKey = i >= hotKeyOffset ? (hotKeys[i - hotKeyOffset] || null) : null
-    const fullName = keyName + octave
+    let actualOctave = octave + Math.floor(i/12)
+    const fullName = keyName + actualOctave
     const pitch = octave * 12 + i
     const handlePress = () => {
       if(onNote)
@@ -61,12 +65,18 @@ export const PianoKeyboard: FunctionComponent<{
           p: pitch,
           pitchNumber: pitch,
           pitchName: keyName,
-          octave,
+          octave: actualOctave,
           fullName,
         })
     }
 
-    const btn = <button onMouseDown={handlePress} key={i} className={keyName}>{hotKey || ' '}</button>
+    let highlighted = highlightKeys.includes(pitch)
+    const btn = <button 
+      onMouseDown={handlePress} 
+      key={i} 
+      className={classNames(keyName, {highlighted})}
+    >{hotKey || ' '}</button>
+
     if(black)
       blackNotes.push(btn)
     else

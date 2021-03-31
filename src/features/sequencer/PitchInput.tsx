@@ -45,12 +45,15 @@ export const PitchInput: FunctionComponent<PitchInputProps> = ({
       })}
       onChange={ e => handleChange(e.target.value) }
       onFocus={() => setHasFocus(true)}
-      onBlur={() => setHasFocus(false)}
+      onBlur={() => setTimeout(() => setHasFocus(false), 50)}
     />
     {hasFocus 
       ? <PianoKeyboard 
+          octave={4}
+          numberOfKeys={36}
           hotKeys={[]} 
-          onNote = { e => onChange(parsePitch(e.fullName)) }
+          onNote = { e => handleChange(e.fullName) }
+          highlightKeys={internalParse.midiNumber ? [internalParse.midiNumber] : [] }
         />
       : null}
   </div>

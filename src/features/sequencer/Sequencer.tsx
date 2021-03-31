@@ -30,7 +30,7 @@ export const Sequencer: FunctionComponent = () => {
       <button onClick={handlePlay}>Play</button>
       <div className="SequencerTempo">
         <label>Tempo:</label>
-        <input type="range" min="50" max="400" value={sequencer.tempo} onChange={e => dispatch(setTempo(Number(e.target.value)))} />
+        <input type="range" min="50" max="1400" value={sequencer.tempo} onChange={e => dispatch(setTempo(Number(e.target.value)))} />
         <span>{sequencer.tempo}bpm</span>
       </div>
     </div>

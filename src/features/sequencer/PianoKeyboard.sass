@@ -1,6 +1,11 @@
 $w: 50px
 $b: 30px
 $h: 200px
+
+@mixin HighlightedKey
+  background-color: #c00;
+  border-color: #600
+
 .PianoKeyboard
 
   button
@@ -23,7 +28,7 @@ $h: 200px
 
   .white-keys
     display: flex
-
+    z-index: 19
     button
       flex-shrink: 0
       width: $w
@@ -31,6 +36,8 @@ $h: 200px
       height: $h
       border-bottom: 30px solid #eee
       transition: border-bottom .1s, background-color .1s
+      &.highlighted
+        @include HighlightedKey
       &:hover
         border-bottom: 33px solid #eee
 
@@ -39,7 +46,7 @@ $h: 200px
   .black-keys
     display: flex
     position: absolute
-    z-index: 1
+    z-index: 20
     button
       width: $b 
       height: $h / 2
@@ -52,6 +59,9 @@ $h: 200px
       border-left: 4px solid #444
       border-right: 4px solid #444
       border-top: 1px solid transparent
+
+      &.highlighted
+        @include HighlightedKey
 
       transition: border-bottom .1s, background-color .1s
       &:hover

@@ -1,8 +1,20 @@
+@keyframes Boing
+  0%
+    transform: scale(0)
+  50%
+    transform: scale(1.1)
+  100%
+    transform: scale(1)
+
+
 .PitchInputWrapper
   position: relative
   .PitchInput
   .PianoKeyboard
+    z-index: 100
+    transform-origin: top left
     position: absolute
     left: 120%
     top: 0px
+    animation: Boing .25s
     

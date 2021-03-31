@@ -19,28 +19,39 @@ export function parsePitch(inputStr:string): PitchParse {
         str,
       }
 
+    
+    
+    let octaveNumber = /\d+$/.exec(str);
+    let octave = 4;
+    if(octaveNumber) {
+      octave = parseInt(octaveNumber[0])
+      str = str.slice(0, -octaveNumber[0].length)
+      console.log(octave, str, '!!');
+    }
+
     // Get letter
     let letterResult = str[0]
     let accidentalResult = str[1];
+
     if(letterResult) { 
       let letter = letterResult[0].toUpperCase();
       let pitchClass = letterValues[letter];
-      let midiNumber = pitchClass + 49
+      let midiNumber = pitchClass + octave * 12
       if(accidentalResult == '#')
         midiNumber++;
       else if(accidentalResult == 'b')
         midiNumber--;
       else if(accidentalResult)
-        throw `"${str}" is not a musical note`
+        throw `"${inputStr}" is not a musical note`
       
       if(pitchClass !== undefined)
         return {
           hasPitch: true,
           midiNumber,
-          str,
+          str: inputStr,
         }
       else
-        throw `"${str}" is not a musical note`;
+        throw `"${inputStr}" is not a musical note`;
     } else
       throw "Could not find letter";
   } catch(err) {
