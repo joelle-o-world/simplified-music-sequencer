@@ -1,0 +1,122 @@
+
+
+$bgBlue: rgb(21,47,170)
+$purple: rgb(170,6,170)
+$gray: rgb(170, 170, 170)
+$dullRed: rgb(170, 3, 0)
+$brightRed: rgb(170, 3, 0)
+$yellow: rgb(253, 255, 85)
+$teal: rgb(52,170,170)
+@use "PitchBG" as *
+@mixin RedBorder
+  border: 3px solid $dullRed
+  margin: 3px
+
+@mixin PurpleHightlight
+  background-color: $purple
+  color: white
+
+@mixin CrimsonBlock
+  background-color: $brightRed
+  color: yellow
+
+@mixin ContentMiddle
+  display: flex
+  justify-content: center
+  align-items: center
+
+@mixin MainFont
+  font-family: monospace
+  font-weight: bold
+
+@mixin InputOverride
+  @include MainFont
+  color: $gray
+  background-color: transparent
+  border: 1px solid $gray
+  outline: none
+
+
+
+
+
+
+body
+  background-color: $bgBlue
+  color: $gray
+  margin: 10px
+  font-family: monospace
+  font-weight: bold
+  
+
+  .App
+    .Sequencer
+      @include RedBorder
+      display: flex
+      flex-direction: column
+      .SequencerControls
+        @include RedBorder
+        order: 2
+        display: flex
+        flex-direction: row
+        position: sticky
+        bottom: 0px
+        z-index: 50
+        padding: 10px
+        margin: 5px
+        background-color: $bgBlue
+        .SequencerPlay
+          @include InputOverride
+          @include CrimsonBlock
+          @include MainFont
+          border: none
+          cursor: pointer
+          font-size: 35px
+      .SequencerSteps
+        @include RedBorder
+        padding: 15px
+        width: 200px
+        display: flex
+        flex-direction: column
+        align-items: right
+        .SequencerStep
+          display: flex
+          flex-direction: row
+          padding: 5px
+          &.nowPlaying
+            @include PurpleHightlight
+            .SequencerStepInput
+              @include PurpleHightlight
+              transform: scale(1.25)
+              border-color: white
+          .SequencerStepTime
+            @include ContentMiddle
+            color: $teal
+            width: 50px
+          &:focus-within .SequencerStepTime
+            background-color: $purple
+          .PitchInput
+            @include InputOverride
+            @include PitchBG
+            width: 60px
+            height: 60px
+            background-color: transparent
+            border: 1px solid $gray
+            text-align: center
+            font-size: 25px
+            color: white
+            display: block
+            font-weight: 1000
+            &:focus
+              @include PurpleHightlight
+              border: 1px solid transparent
+            //transition: transform .1s
+        .SequencerAddSteps
+          @include InputOverride
+          background-color: $gray
+          color: $bgBlue
+          align-self: stretch
+          width: 60px
+          margin: 0px
+          height: 60px
+          font-size: 25px

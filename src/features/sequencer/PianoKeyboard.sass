@@ -1,14 +1,17 @@
+@use "../../PitchBG" as *
+
 $w: 50px
 $b: 30px
 $h: 200px
 
 @mixin HighlightedKey
-  background-color: #c00;
-  border-color: #600
+  @include PitchBG
+  //background-color: #c00
+  //border-color: #600
 
 .PianoKeyboard
 
-  button
+  .key
 
     box-sizing: border-box
 
@@ -18,18 +21,21 @@ $h: 200px
     -khtml-user-select: none
     -webkit-user-select: none
     -o-user-select: none
-    //transition: transform .1s
-    //&:hover
-      //transform: scale(1.1)
-    //&:active
-      //transform: scale(1)
+    margin: 1px
+    display: flex
+
+    align-items: center
+    justify-content: flex-end
+    flex-direction: column
+    cursor: pointer
+    font-family: monospace
 
 
 
   .white-keys
     display: flex
     z-index: 19
-    button
+    .key
       flex-shrink: 0
       width: $w
       background-color: white
@@ -47,8 +53,9 @@ $h: 200px
     display: flex
     position: absolute
     z-index: 20
-    button
+    .key
       width: $b 
+      font-size: 12px
       height: $h / 2
       margin-left: $w - $b
       background-color: black

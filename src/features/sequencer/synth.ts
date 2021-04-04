@@ -1,6 +1,9 @@
 import EventEmitter from "events";
 import {PitchParse} from "./parsePitch";
 
+// @ts-ignore
+const AudioContext = window.AudioContext || window.webkitAudioContext;
+
 export class Synth extends EventEmitter {
   
   ctx: AudioContext;
@@ -8,14 +11,13 @@ export class Synth extends EventEmitter {
   osc: OscillatorNode;
 
   constructor() {
-    super()
+    super();
     this.ctx = new AudioContext();
     this.gain = this.ctx.createGain();
     this.osc = this.ctx.createOscillator();
     this.osc.connect(this.gain);
     this.osc.type = "square"
     this.gain.connect(this.ctx.destination);
-    //this.osc.connect(this.ctx.destination)
     this.gain.gain.value = 0;
     this.osc.start();
   }

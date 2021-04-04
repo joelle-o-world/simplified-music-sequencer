@@ -5,9 +5,10 @@ import {selectSequencer, setNote, addSteps, setTempo, publish} from './sequencer
 import {PitchParse} from './parsePitch';
 import PitchInput from './PitchInput';
 import {Synth} from './synth';
+import {GrPlayFill} from 'react-icons/gr';
 import classNames from 'classnames'
 
-import './Sequencer.sass'
+//import './Sequencer.sass'
 
 // TODO: Replace this function with time signature variable
 const printTime = (t:number) => t%2 ? 'and' : String(Math.floor(t/2)%4 + 1);
@@ -25,9 +26,12 @@ export const Sequencer: FunctionComponent = () => {
     });
   }
 
-  return <div className="Sequencer horizontal">
+  return <div className="Sequencer">
     <div className="SequencerControls">
-      <button onClick={handlePlay}>Play</button>
+    <button className="SequencerPlay" onClick={handlePlay}>
+      <GrPlayFill/>
+      Play
+    </button>
       <button onClick={() => dispatch(publish())}>Share</button>
       <div className="SequencerTempo">
         <label>Tempo:</label>
@@ -35,7 +39,7 @@ export const Sequencer: FunctionComponent = () => {
         <span>{sequencer.tempo}bpm</span>
       </div>
     </div>
-    <div className="Sequencer_Steps">
+    <div className="SequencerSteps">
       {sequencer.steps.map((step, i) => ( 
         <SequencerStep 
           note={step} 
@@ -46,8 +50,8 @@ export const Sequencer: FunctionComponent = () => {
           onChange={val => dispatch(setNote({stepIndex: i, newNote: val}))}
         /> 
       ))}
+      <button className="SequencerAddSteps" onClick={() => dispatch(addSteps(8))}>{"+"}</button>
     </div>
-    <button onClick={() => dispatch(addSteps(8))}>Add 8 more steps</button>
   </div>
 }
 
@@ -70,7 +74,7 @@ export const SequencerStep: FunctionComponent<SequencerStepProps> = ({
   return <div className={classNames("SequencerStep", {nowPlaying: isNowPlaying})}>
 
     {timeLabel !== undefined
-      ? <span className="SequencerStep_TimeIndex">{timeLabel}</span>
+      ? <span className="SequencerStepTime">{timeLabel}</span>
       : null
     }
 
@@ -78,7 +82,7 @@ export const SequencerStep: FunctionComponent<SequencerStepProps> = ({
     <PitchInput 
       value={note.str} 
       onChange={(e: any) => onChange ? onChange(e) : null} 
-      className="SequencerStep_input"
+      className="SequencerStepInput"
     />
 
     {note.errorMessage 

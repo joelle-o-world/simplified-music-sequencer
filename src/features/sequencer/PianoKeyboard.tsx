@@ -4,7 +4,8 @@ import classNames from 'classnames';
 
 import './PianoKeyboard.sass';
 
-const keyNames = ['C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B']
+const keyNames = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
+const flatKeyNames = ['C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B']
 const defaultHotKeys = ['a','w','s','e','d','f','t','g','y','h','u','j','k','o','l', 'p', ';'];
 
 export const PianoKeyboard: FunctionComponent<{
@@ -55,6 +56,7 @@ export const PianoKeyboard: FunctionComponent<{
   const blackNotes = []
   for(let i=0; i < numberOfKeys; ++i) {
     const keyName = keyNames[i % 12]
+    const flatKeyName = flatKeyNames[i%12];
     const black = /[b#]$/.test(keyName)
     const hotKey = i >= hotKeyOffset ? (hotKeys[i - hotKeyOffset] || null) : null
     let actualOctave = octave + Math.floor(i/12)
@@ -72,11 +74,11 @@ export const PianoKeyboard: FunctionComponent<{
     }
 
     let highlighted = highlightKeys.includes(pitch)
-    const btn = <button 
+    const btn = <div 
       onMouseDown={handlePress} 
       key={i} 
-      className={classNames(keyName, {highlighted})}
-    >{labelKeys ? fullName : (hotKey || ' ')}</button>
+      className={classNames("key", flatKeyName, {highlighted})}
+    >{labelKeys ? fullName : (hotKey || ' ')}</div>
 
     if(black)
       blackNotes.push(btn)

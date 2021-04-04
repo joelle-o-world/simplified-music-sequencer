@@ -1,13 +1,15 @@
 .Sequencer
-  background-color: rgb(254, 249, 236)
   display: flex
   flex-direction: column
   align-items: left
-  .Sequencer_Steps
+  .SequencerSteps
     display: flex
     flex-direction: column
+    align-items: left
     .SequencerStep
       display: flex
+      margin-left: 50px
+      width: 100px
       flex-direction: row
       align-items: center
       position: relative
@@ -23,12 +25,12 @@
         z-index: 10
         background-color: #333
         color: white
-      .SequencerStep_TimeIndex
+      .SequencerStepTimeIndex
         display: block
         width: 40px
         font-size: 11px
         text-align: center
-      .SequencerStep_input
+      .PitchInput
         width: 2em
         height: 2em
         text-align: center
