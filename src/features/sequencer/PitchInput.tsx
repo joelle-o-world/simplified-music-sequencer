@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useRef} from 'react'
 import {FunctionComponent, useState} from 'react';
 import classNames from 'classnames';
 
@@ -36,6 +36,7 @@ export const PitchInput: FunctionComponent<PitchInputProps> = ({
   onChange,
 }) => {
 
+  const inputRef = useRef(null)
   const [hasFocus, setHasFocus] = useState(false)
 
   const [internalValue, setInternalValue] = useState('');
@@ -65,10 +66,12 @@ export const PitchInput: FunctionComponent<PitchInputProps> = ({
       onChange={ e => handleChange(e.target.value) }
       onFocus={() => setHasFocus(true)}
       onBlur={() => setTimeout(() => setHasFocus(false), 50)}
+      placeholder="~"
+      ref={inputRef}
     />
     {hasFocus 
       ? <PianoKeyboard 
-          octave={4}
+          octave={3}
           numberOfKeys={36}
           hotKeys={[]} 
           onNote = { e => handleChange(e.fullName) }

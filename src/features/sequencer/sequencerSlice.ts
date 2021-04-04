@@ -2,7 +2,7 @@ import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {RootState, AppThunk} from "../../app/store";
 import {PitchParse, parsePitch} from './parsePitch';
 import {publishSequence} from "../../client-api/publishSequence";
-import {refreshSequencesIndex} from "../sharing/sharingSlice";
+import {refreshSequencesIndex, hideUploadForm} from "../sharing/sharingSlice";
 
 
 export interface SequencerState {
@@ -76,10 +76,15 @@ export const sequencerSlice = createSlice({
       state.composer = "";
       state.title = "";
     },
+
+    doubleSequence: state => {
+      let clone = JSON.parse(JSON.stringify(state.steps))
+      state.steps = [...state.steps, ...clone];
+    },
   },
 })
 
-export const {setSequence, setNote, clearNote, addSteps, setTempo} = sequencerSlice.actions;
+export const {setSequence, setNote, clearNote, addSteps, setTempo, doubleSequence, setTitle, setComposer} = sequencerSlice.actions;
 
 
 export const publish = (): AppThunk => async (dispatch, getState) => {
@@ -87,7 +92,9 @@ export const publish = (): AppThunk => async (dispatch, getState) => {
   try {
     let result = await publishSequence(sequencerState);
 
-    dispatch(refreshSequencesIndex);
+    dispatch(refreshSequencesIndex());
+    dispatch(hideUploadForm())
+    console.log('done');
   } catch(err) {
     throw err;
   }

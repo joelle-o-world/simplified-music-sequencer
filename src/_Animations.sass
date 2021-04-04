@@ -1,0 +1,15 @@
+@keyframes twitch
+  0%
+    tranform: scale(1)
+  50%
+    transform: scale(1.25)
+  100%
+    transform: scale(1)
+
+@mixin TwitchOnHover
+  &:hover
+    animation: twitch .1s
+
+@mixin TwitchOnFocus
+  &:focus
+    animation: twitch .1s

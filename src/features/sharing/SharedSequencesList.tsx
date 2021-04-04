@@ -8,18 +8,25 @@ export const SharedSequencesList: FunctionComponent = () => {
 
   useEffect(() => {
     dispatch(refreshSequencesIndex())
-  });
+  }, [dispatch]);
 
-  return <ul>
-    {
-      sharingState.publishedSequences.map(
-        ({id, title, composer}) => <li key={id}>
-          {id}
-          <button onClick={() => dispatch(openSequence(id))}>open</button>
-        </li>
-      )
-    }
-  </ul>
+  return <div className="SharedSequencesListWrapper">
+      <h2>Open a sequence that someone has shared:</h2>
+      <ul className="SharedSequencesList">
+        {
+          sharingState.publishedSequences.map(
+            ({id, title, composer}) => <li key={id} className="SharedSequence">
+              <button onClick={() => dispatch(openSequence(id))} className="SharedSequenceOpen">open</button>
+              <span>
+                <span className="SharedSequenceTitle">{title}</span> 
+                {" by "} 
+                <span className="SharedSequenceComposer">{composer}</span>
+              </span>
+            </li>
+          )
+        }
+      </ul>
+    </div>
 }
 
 export default SharedSequencesList;

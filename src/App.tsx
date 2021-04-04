@@ -11,7 +11,6 @@ function App() {
       <article className="friendly-text">
       </article>
       <Sequencer />
-      <SharedSequencesList />
     </div>
   );
 }

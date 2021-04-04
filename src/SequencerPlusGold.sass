@@ -1,3 +1,10 @@
+@use "PitchBG" as *
+@use "Animations" as *
+
+@font-face
+  font-family: 'game_over'
+  src: url(./ARCADECLASSIC.TTF) format('truetype')
+
 
 
 $bgBlue: rgb(21,47,170)
@@ -7,18 +14,31 @@ $dullRed: rgb(170, 3, 0)
 $brightRed: rgb(170, 3, 0)
 $yellow: rgb(253, 255, 85)
 $teal: rgb(52,170,170)
-@use "PitchBG" as *
+$green: rgb(45,162,0)
+
 @mixin RedBorder
   border: 3px solid $dullRed
   margin: 3px
 
 @mixin PurpleHightlight
   background-color: $purple
+  border-color: $purple
   color: white
 
 @mixin CrimsonBlock
   background-color: $brightRed
-  color: yellow
+  border-color: $brightRed
+  color: $yellow
+
+@mixin GreenBlock
+  background-color: $green
+  border-color: $green
+  color: $yellow
+
+@mixin TealBlock
+  background-color: $teal
+  color: $bgBlue
+  border: none
 
 @mixin ContentMiddle
   display: flex
@@ -26,8 +46,11 @@ $teal: rgb(52,170,170)
   align-items: center
 
 @mixin MainFont
-  font-family: monospace
-  font-weight: bold
+  font-family: game_over
+  font-weight: regular
+  letter-spacing: 5%
+  word-spacing: 10px
+  //font-weight: bold
 
 @mixin InputOverride
   @include MainFont
@@ -35,47 +58,76 @@ $teal: rgb(52,170,170)
   background-color: transparent
   border: 1px solid $gray
   outline: none
+  font-size: inherit
+  svg
+    color: inherit
+    vertical-align: middle
+    margin-right: 5px
 
+@mixin BlackInputs
+  input
+    @include InputOverride
+    background-color: black
+    border: none
+    padding: 10px
+    color: white
 
-
-
-
+@mixin ButtonOverride
+  @include InputOverride
+  cursor: pointer
+  margin: 5px
+  &:hover
+    @include PurpleHightlight
 
 body
+  @include MainFont
   background-color: $bgBlue
   color: $gray
   margin: 10px
-  font-family: monospace
-  font-weight: bold
   
 
   .App
     .Sequencer
       @include RedBorder
       display: flex
-      flex-direction: column
+      flex-direction: row
+      flex-wrap: wrap
       .SequencerControls
         @include RedBorder
-        order: 2
+        flex-basis: 100%
+        order: 3
         display: flex
         flex-direction: row
+        align-items: center
         position: sticky
         bottom: 0px
         z-index: 50
         padding: 10px
-        margin: 5px
         background-color: $bgBlue
         .SequencerPlay
-          @include InputOverride
+          @include ButtonOverride
           @include CrimsonBlock
-          @include MainFont
-          border: none
+          @include TwitchOnHover
           cursor: pointer
           font-size: 35px
+          min-height: 50px
+        .SequencerUpload
+          @include ButtonOverride
+          @include TwitchOnHover
+          @include GreenBlock
+          cursor: pointer
+          font-size: 35px
+          margin: 5px
+          min-height: 50px
+      .SharedSequencesListWrapper
+        padding: 20px
+        flex-basis: 350px
+        order: 2
+        flex-grow: 4
       .SequencerSteps
         @include RedBorder
         padding: 15px
-        width: 200px
+        flex-basis: 150px
         display: flex
         flex-direction: column
         align-items: right
@@ -88,6 +140,7 @@ body
             .SequencerStepInput
               @include PurpleHightlight
               transform: scale(1.25)
+              z-index: 45
               border-color: white
           .SequencerStepTime
             @include ContentMiddle
@@ -95,10 +148,12 @@ body
             width: 50px
           &:focus-within .SequencerStepTime
             background-color: $purple
+            color: white
           .PitchInput
             @include InputOverride
-            @include PitchBG
-            width: 60px
+            @include PitchBG(true)
+            @include TwitchOnHover
+            width: 80px
             height: 60px
             background-color: transparent
             border: 1px solid $gray
@@ -107,16 +162,113 @@ body
             color: white
             display: block
             font-weight: 1000
+            .PianoKeyboard
+              background-color: #333
+            //&.hasPitch
+              //border-color: 2px solid white
+
             &:focus
               @include PurpleHightlight
               border: 1px solid transparent
             //transition: transform .1s
+          &.hasError
+            background-color: red
+          .parse-error
+            @include ContentMiddle
+            background-color: red
+            color: white
+            padding: 7px
         .SequencerAddSteps
           @include InputOverride
           background-color: $gray
           color: $bgBlue
           align-self: stretch
-          width: 60px
+          width: 80px
           margin: 0px
           height: 60px
           font-size: 25px
+          margin-left: 57px
+          color: $teal
+          cursor: pointer
+          &:hover
+            background-color: $teal
+            border-color: $teal
+            color: $bgBlue
+
+    .UploadFormWrapper
+      position: fixed
+      top: 0px
+      bottom: 0px
+      left: 0px
+      right: 0px
+      background-color: rgb(0,0,0, .9)
+      z-index: 60
+      @include ContentMiddle
+      .UploadForm
+        @include RedBorder
+        @include BlackInputs
+        background-color: $bgBlue
+        padding: 20px
+        font-size: 35px
+        .formField
+          display: flex
+          flex-direction: column
+          align-items: stretch
+          margin-bottom: 20px
+          label
+            letter-spacing: 10px
+          input, label
+            font-size: 25px
+        .UploadFormSubmit
+          float: right
+          @include ButtonOverride
+          @include TwitchOnHover
+          @include GreenBlock
+          font-size: inherit
+          min-height: 50px
+
+        .UploadFormCancel
+          float: right
+          @include ButtonOverride
+          @include TwitchOnHover
+          @include CrimsonBlock
+          font-size: inherit
+          min-height: 50px
+
+
+    .SequencerInstructions
+      padding: 20px
+      font-size: 35px
+      hgroup
+        h1
+          @include CrimsonBlock
+          text-align: center
+          font-size: 50px
+          margin: 0px
+          padding: 4px
+        h2
+          @include TealBlock
+          text-align: center
+          font-size: 35px
+          padding: 4px
+          margin: 0px
+
+    .SharedSequencesList
+      list-style: none
+      .SharedSequence
+        margin: 10px
+        font-size: 25px
+        padding: 20px
+        background-color: #333
+        .SharedSequenceTitle
+          color: $yellow
+          padding: 3px
+        .SharedSequenceComposer
+          color: $teal
+        button.SharedSequenceOpen
+          @include ButtonOverride
+          @include TealBlock
+          @include TwitchOnHover
+          font-size: 130%
+          margin-right: 25px
+

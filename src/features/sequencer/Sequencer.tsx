@@ -1,12 +1,17 @@
 import React, {useState} from 'react';
 import {FunctionComponent} from "react";
 import {useSelector, useDispatch} from 'react-redux';
-import {selectSequencer, setNote, addSteps, setTempo, publish} from './sequencerSlice';
+import {selectSequencer, setNote, doubleSequence, setTempo, publish} from './sequencerSlice';
 import {PitchParse} from './parsePitch';
 import PitchInput from './PitchInput';
 import {Synth} from './synth';
-import {GrPlayFill} from 'react-icons/gr';
 import classNames from 'classnames'
+import {IoPlaySharp } from 'react-icons/io5'
+import {IoIosSave} from 'react-icons/io';
+import SharedSequencesList from '../sharing/SharedSequencesList'
+import {showUploadForm} from '../sharing/sharingSlice';
+import {UploadForm} from '../sharing/UploadForm';
+import SequencerInstructions from './Instructions';
 
 //import './Sequencer.sass'
 
@@ -27,18 +32,23 @@ export const Sequencer: FunctionComponent = () => {
   }
 
   return <div className="Sequencer">
+    <UploadForm/>
     <div className="SequencerControls">
     <button className="SequencerPlay" onClick={handlePlay}>
-      <GrPlayFill/>
+      <IoPlaySharp className="button-icon"/>
       Play
     </button>
-      <button onClick={() => dispatch(publish())}>Share</button>
+    <button onClick={() => dispatch(showUploadForm())} className="SequencerUpload">
+      <IoIosSave/>
+      Upload
+    </button>
       <div className="SequencerTempo">
         <label>Tempo:</label>
         <input type="range" min="50" max="400" value={sequencer.tempo} onChange={e => dispatch(setTempo(Number(e.target.value)))} />
         <span>{sequencer.tempo}bpm</span>
       </div>
     </div>
+
     <div className="SequencerSteps">
       {sequencer.steps.map((step, i) => ( 
         <SequencerStep 
@@ -50,7 +60,11 @@ export const Sequencer: FunctionComponent = () => {
           onChange={val => dispatch(setNote({stepIndex: i, newNote: val}))}
         /> 
       ))}
-      <button className="SequencerAddSteps" onClick={() => dispatch(addSteps(8))}>{"+"}</button>
+      <button className="SequencerAddSteps" onClick={() => dispatch(doubleSequence())}>{"+"}</button>
+    </div>
+    <div className="page">
+      <SequencerInstructions />
+      <SharedSequencesList />
     </div>
   </div>
 }

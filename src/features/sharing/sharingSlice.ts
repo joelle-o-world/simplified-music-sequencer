@@ -13,11 +13,13 @@ export interface PublishedSequence {
 export interface SharingState {
   publishedSequences: PublishedSequence[];
   isRefreshing: boolean;
+  showingUploadForm: boolean;
 }
 
 const initialState: SharingState = {
   publishedSequences: [],
   isRefreshing: false,
+  showingUploadForm: false,
 }
 
 export const sharingSlice = createSlice({
@@ -27,11 +29,19 @@ export const sharingSlice = createSlice({
     setPublishedSequences: (state, action: PayloadAction<PublishedSequence[]>) => {
       state.publishedSequences = action.payload;
     },
+    
+    showUploadForm: state => {
+      state.showingUploadForm = true
+    },
+
+    hideUploadForm: state => {
+      state.showingUploadForm = false;
+    },
   },
 })
 export default sharingSlice.reducer;
 
-export const {setPublishedSequences} = sharingSlice.actions;
+export const {setPublishedSequences, showUploadForm, hideUploadForm} = sharingSlice.actions;
 
 export const refreshSequencesIndex = ():AppThunk => async (dispatch) => {
   try {
