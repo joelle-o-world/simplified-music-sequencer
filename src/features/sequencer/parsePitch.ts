@@ -26,7 +26,6 @@ export function parsePitch(inputStr:string): PitchParse {
     if(octaveNumber) {
       octave = parseInt(octaveNumber[0])
       str = str.slice(0, -octaveNumber[0].length)
-      console.log(octave, str, '!!');
     }
 
     // Get letter

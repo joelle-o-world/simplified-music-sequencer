@@ -1,11 +1,11 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
-import counterReducer from '../features/counter/counterSlice';
 import sequencerReducer from '../features/sequencer/sequencerSlice';
+import sharingReducer from '../features/sharing/sharingSlice';
 
 export const store = configureStore({
   reducer: {
-    counter: counterReducer,
     sequencer: sequencerReducer,
+    sharing: sharingReducer,
   },
 });
 
