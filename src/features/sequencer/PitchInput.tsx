@@ -83,6 +83,7 @@ export const PitchInput: FunctionComponent<PitchInputProps> = ({
       id={id}
       onKeyPress={onKeyPress}
       onKeyDown={onKeyDown}
+      autoComplete="off"
     />
     {hasFocus 
       ? <PianoKeyboard 
