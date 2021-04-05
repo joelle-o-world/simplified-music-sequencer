@@ -51,14 +51,30 @@ export const Sequencer: FunctionComponent = () => {
 
     <div className="SequencerSteps">
       {sequencer.steps.map((step, i) => ( 
-        <SequencerStep 
-          note={step} 
-          key={i} 
-          timeIndex={i}
-          timeLabel={printTime(i)}
-          isNowPlaying={playingStep === i}
-          onChange={val => dispatch(setNote({stepIndex: i, newNote: val}))}
-        /> 
+        <div className={classNames("SequencerStep", {nowPlaying: playingStep === i, barline: i%8 === 0})} key={i}>
+          <span className="SequencerStepTime">{printTime(i)}</span>
+          <PitchInput 
+            value={step.str} 
+            onChange={val => dispatch(setNote({stepIndex: i, newNote: val}))} 
+            className="SequencerStepInput"
+            id={"SequencerStepPitch-"+i}
+            onKeyDown={(e) => {
+              if(e.key == "ArrowDown") {
+                let el = document.getElementById("SequencerStepPitch-" + (i+1)%sequencer.steps.length);
+                if(el)
+                  el.focus();
+              } else if(e.key == "ArrowUp") {
+                let el = document.getElementById("SequencerStepPitch-" + (i-1)%sequencer.steps.length);
+                if(el)
+                  el.focus();
+              }
+            }}
+          />
+          {step.errorMessage 
+            ? <span className="parse-error">{step.errorMessage}</span> 
+            : null
+          }
+        </div>
       ))}
       <button className="SequencerAddSteps" onClick={() => dispatch(doubleSequence())}>{"+"}</button>
     </div>
