@@ -7,7 +7,6 @@ import {selectSequencer, setComposer, setTitle, publish} from '../sequencer/sequ
 export const UploadForm: FunctionComponent = () => {
   const dispatch = useDispatch();
   const {showingUploadForm} = useSelector(selectSharing);
-  const {title, composer} = useSelector(selectSequencer)
 
 
   if(showingUploadForm)
@@ -15,13 +14,13 @@ export const UploadForm: FunctionComponent = () => {
       <div className="UploadForm">
         <div className="formField">
           <label>What is your name?</label>
-          <input value={composer} onChange={e => {dispatch(setComposer(e.target.value))}}/>
+          <ComposerField />
         </div>
         <div className="formField">
           <label>Please choose a title for your sequence:</label>
-          <input value={title} onChange={e => {dispatch(setTitle(e.target.value))}} />
+          <TitleField/>
         </div>
-        <button className="UploadFormSubmit" onClick={() => {dispatch(publish())}}><IoIosSave/>Upload</button>
+        <UploadButton />
         <button className="UploadFormCancel" onClick={() => {dispatch(hideUploadForm())}}>
           <IoIosClose/>Cancel
         </button>
@@ -30,4 +29,21 @@ export const UploadForm: FunctionComponent = () => {
 
   else
     return null
+}
+
+export const TitleField: FunctionComponent = () => {
+  const dispatch = useDispatch();
+  const {title} = useSelector(selectSequencer);
+  return <input onFocus={e => e.target.select()} value={title} onChange={e => {dispatch(setTitle(e.target.value))}}/>
+};
+
+export const ComposerField: FunctionComponent<{autoFocus?: boolean}> = ({autoFocus}) => {
+  const dispatch = useDispatch();
+  const {composer} = useSelector(selectSequencer);
+  return <input autoFocus={autoFocus} value={composer} onChange={e => {dispatch(setComposer(e.target.value))}} />
+}
+
+export const UploadButton: FunctionComponent = () => {
+  const dispatch = useDispatch();
+  return <button className="UploadFormSubmit" onClick={() => {dispatch(publish())}}><IoIosSave/>Upload</button>
 }

@@ -52,10 +52,14 @@ export const refreshSequencesIndex = ():AppThunk => async (dispatch) => {
   }
 }
 
-export const openSequence = (id:string):AppThunk => async (dispatch) => {
+export const openSequence = (id:string):AppThunk => async (dispatch, getState) => {
   try {
     let result = await fetchSequenceData(id)
-    dispatch(setSequence(result));
+    dispatch(setSequence({
+      ...result,
+      composer: getState().sequencer.composer,
+      title: result.title + " edit"
+    }));
   } catch(err) {
     throw err;
   }

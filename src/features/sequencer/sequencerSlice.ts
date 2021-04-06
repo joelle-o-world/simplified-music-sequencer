@@ -24,7 +24,7 @@ const initialState: SequencerState = {
     parsePitch(''),
   ],
   tempo: 140,
-  title: "",
+  title: "Untitled Sequence",
   composer: "",
 }
 

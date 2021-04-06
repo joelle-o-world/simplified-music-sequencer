@@ -6,9 +6,14 @@ export interface PublishedSequence {
   filename?: string;
 }
 
-const apiLocation = '/api/'
+const apiLocation = 'api/'
 
 export function publishSequence(sequence:SequencerState):Promise<string> {
+  if(sequence.composer.length == 0)
+    sequence = {
+      ...sequence,
+      composer: 'anon',
+    }
   return new Promise((fulfil, reject) => {
     const xhttp = new XMLHttpRequest;
     const url = apiLocation + 'publish-sequence.php';
