@@ -1,10 +1,10 @@
 import React, {useState} from 'react';
 import {FunctionComponent} from "react";
 import {useSelector, useDispatch} from 'react-redux';
-import {selectSequencer, setNote, doubleSequence, setTempo, publish} from './sequencerSlice';
+import {selectSequencer, setNote, doubleSequence, setTempo} from './sequencerSlice';
 import {PitchParse} from './parsePitch';
 import PitchInput from './PitchInput';
-import {Synth} from './synth';
+import {Synth, playSequence} from './synth';
 import classNames from 'classnames'
 import {IoPlaySharp } from 'react-icons/io5'
 import {IoIosSave} from 'react-icons/io';
@@ -24,11 +24,16 @@ export const Sequencer: FunctionComponent = () => {
   const [playingStep, setPlayingStep] = useState(null as null|number)
 
   const handlePlay = () => {
-    let synth = new Synth();
-    synth.playSequence(sequencer.steps, sequencer.tempo*2);
-    synth.on('step', step => {
+    //let synth = new Synth();
+    //synth.playSequence(sequencer.steps, sequencer.tempo*2);
+    //synth.on('step', step => {
+      //setPlayingStep(step);
+    //});
+    let synth = playSequence({...sequencer, looped:true})
+    synth.events.on('step', step => {
       setPlayingStep(step);
-    });
+      console.log('##', step);
+    })
   }
 
   return <div className="Sequencer">
@@ -59,12 +64,12 @@ export const Sequencer: FunctionComponent = () => {
             className="SequencerStepInput"
             id={"SequencerStepPitch-"+i}
             onKeyDown={(e) => {
-              if(e.key == "ArrowDown" || e.key == "j") {
+              if(e.key === "ArrowDown" || e.key === "j") {
                 e.preventDefault();
                 let el = document.getElementById("SequencerStepPitch-" + (i+1)%sequencer.steps.length);
                 if(el)
                   el.focus();
-              } else if(e.key == "ArrowUp" || e.key == "k") {
+              } else if(e.key === "ArrowUp" || e.key === "k") {
                 e.preventDefault()
                 let el = document.getElementById("SequencerStepPitch-" + (i-1+sequencer.steps.length)%sequencer.steps.length);
                 if(el)

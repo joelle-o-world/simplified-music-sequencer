@@ -1,5 +1,6 @@
 import EventEmitter from "events";
 import {PitchParse} from "./parsePitch";
+import {SequencerState} from "./sequencerSlice";
 
 // @ts-ignore
 const AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -34,7 +35,8 @@ export class Synth extends EventEmitter {
   }
 
   stop(t: number) {
-    this.osc.stop(t);
+    this.gain.gain.setTargetAtTime(0, t, 0.1)
+    this.osc.stop(t + 2);
   }
 
   gracefulStop(t: number) {
@@ -60,5 +62,75 @@ export class Synth extends EventEmitter {
     setTimeout(() => {
       this.emit('step', null);
     }, startTime + sequence.length * stepInterval*1000)
+  }
+}
+
+export function playSequence(
+  sequence:SequencerState, 
+  options:{startTime?: number}={},
+  synth = new Synth(),
+) {
+  const ctx = synth.ctx;
+  const startTime = options.startTime || (ctx.currentTime+.3);
+  const at = (t: number, f: () => void) => {
+    setTimeout(f, 1000*(t - ctx.currentTime));
+  }
+
+  /// Number of steps to schedule at once
+  const scheduleChunkSize = 8;
+
+  const events = new EventEmitter();
+
+  let nextStep = 0;
+  let nextStepTime = startTime;
+
+  const scheduleFinish = (t: number) => {
+    synth.stop(t);
+    at(t, () => events.emit('finish'))
+  }
+
+  const scheduleMore = () => {
+    const stepDuration = 60 / (sequence.tempo * (sequence.stepsPerBeat||2));
+
+
+    // Schedule the notes
+    for(let i=0; i < scheduleChunkSize; ++i) {
+
+      // Handle looping / stopping at end
+      if(nextStep >= sequence.steps.length) {
+        if(sequence.looped)
+          nextStep = 0;
+        else {
+          scheduleFinish(nextStepTime);
+          return ;
+        }
+      }
+
+      let step = sequence.steps[nextStep];
+      let midiNumber = step.midiNumber;
+      if(midiNumber !== undefined)
+        synth.playNote(midiNumber, nextStepTime);
+      const stepNumber = nextStep;
+      at(nextStepTime, () => events.emit('step', stepNumber))
+
+      nextStep++;
+      nextStepTime += stepDuration
+    }
+
+    // Schedule next reshedule
+    at(nextStepTime - .1, () => scheduleMore());
+  }
+
+  const updateSequence = (seq: SequencerState) => {
+    sequence = seq;
+  }
+
+  // Start it running!
+  scheduleMore();
+
+
+  return {
+    events,
+    updateSequence,
   }
 }

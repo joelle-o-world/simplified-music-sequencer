@@ -1,4 +1,4 @@
-import React, {FunctionComponent, FormEvent} from 'react';
+import React, {FunctionComponent, } from 'react';
 import {IoIosSave, IoIosClose} from 'react-icons/io';
 import {useSelector, useDispatch} from 'react-redux';
 import {selectSharing, hideUploadForm} from './sharingSlice';

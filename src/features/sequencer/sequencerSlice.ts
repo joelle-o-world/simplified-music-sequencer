@@ -4,10 +4,13 @@ import {PitchParse, parsePitch} from './parsePitch';
 import {publishSequence} from "../../client-api/publishSequence";
 import {refreshSequencesIndex, hideUploadForm} from "../sharing/sharingSlice";
 
+export type SequencerStepState = PitchParse;
 
 export interface SequencerState {
   steps: PitchParse[];
   tempo: number;
+  stepsPerBeat?: number;
+  looped?: boolean;
   title: string;
   composer: string;
 }
@@ -24,6 +27,8 @@ const initialState: SequencerState = {
     parsePitch(''),
   ],
   tempo: 140,
+  stepsPerBeat: 2,
+  looped: true,
   title: "Untitled Sequence",
   composer: "",
 }
@@ -94,7 +99,6 @@ export const publish = (): AppThunk => async (dispatch, getState) => {
 
     dispatch(refreshSequencesIndex());
     dispatch(hideUploadForm())
-    console.log('done');
   } catch(err) {
     throw err;
   }

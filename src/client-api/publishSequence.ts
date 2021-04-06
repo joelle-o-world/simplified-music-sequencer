@@ -9,13 +9,13 @@ export interface PublishedSequence {
 const apiLocation = 'api/'
 
 export function publishSequence(sequence:SequencerState):Promise<string> {
-  if(sequence.composer.length == 0)
+  if(sequence.composer.length === 0)
     sequence = {
       ...sequence,
       composer: 'anon',
     }
   return new Promise((fulfil, reject) => {
-    const xhttp = new XMLHttpRequest;
+    const xhttp = new XMLHttpRequest();
     const url = apiLocation + 'publish-sequence.php';
     xhttp.open('post', url);
     xhttp.onload = () => fulfil(xhttp.responseText);
@@ -36,7 +36,7 @@ export function publishSequence(sequence:SequencerState):Promise<string> {
 
 export function listSequences():Promise<{id:string; composer?:string; title?:string}[]> {
   return new Promise((fulfil, reject) => {
-    const xhttp = new XMLHttpRequest;
+    const xhttp = new XMLHttpRequest();
     const url = apiLocation + 'list-sequences.php';
     xhttp.open('get', url);
     xhttp.onload = () => fulfil(
@@ -56,7 +56,7 @@ export function listSequences():Promise<{id:string; composer?:string; title?:str
 
 export function fetchSequenceData(sequenceId: string):Promise<SequencerState> {
   return new Promise((fulfil, reject) => {
-    const xhttp = new XMLHttpRequest;
+    const xhttp = new XMLHttpRequest();
     const url = apiLocation + `sequence-data.php?id=${
       encodeURIComponent(sequenceId)
     }`;
