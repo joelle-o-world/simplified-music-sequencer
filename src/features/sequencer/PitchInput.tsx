@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useRef} from 'react'
 import {FunctionComponent, useState} from 'react';
 import classNames from 'classnames';
 
@@ -11,6 +11,7 @@ import './PitchInput.sass'
 import {playPitch} from '../synth/synth';
 import {useSelector} from 'react-redux';
 import {selectSynth} from '../synth/synthSlice';
+import {useElementPosition} from '../../hooks/useElementPosition';
 
 export const cssPitchClassNames = [
   'pitch-c',
@@ -34,7 +35,6 @@ export interface PitchInputProps {
   id?: string;
   onKeyPress?: (e:React.KeyboardEvent) => void;
   onKeyDown?: (e:React.KeyboardEvent) => void;
-  inputRef?: React.RefObject<HTMLInputElement>;
   onPianoPick?: () => void;
 }
 
@@ -45,12 +45,12 @@ export const PitchInput: FunctionComponent<PitchInputProps> = ({
   id,
   onKeyPress,
   onKeyDown,
-  inputRef,
   onPianoPick,
 }) => {
 
   const {playing} = useSelector(selectSynth)
   const [hasFocus, setHasFocus] = useState(false)
+
 
   const [internalValue, setInternalValue] = useState('');
   let displayValue = value !== undefined ? value : internalValue
@@ -69,7 +69,17 @@ export const PitchInput: FunctionComponent<PitchInputProps> = ({
     setInternalValue(str);
   }
 
-  return <div className={classNames(className, "PitchInputWrapper", {hasFocus})}>
+  const divRef = useRef(null)
+  const divRect = useElementPosition(divRef);
+  const pianoWidth = 1000
+  const pianoPositioner = pianoWidth > window.innerWidth 
+    ?  {left: '0px'} 
+    : (divRect.elementLeft + pianoWidth > window.innerWidth
+      ? {right: '0px'}
+      : undefined
+      )
+
+  return <div className={classNames(className, "PitchInputWrapper", {hasFocus})} ref={divRef}>
     <input 
       value={displayValue}
       className={classNames(className, "PitchInput", {
@@ -89,26 +99,27 @@ export const PitchInput: FunctionComponent<PitchInputProps> = ({
           playPitch(internalParse.midiNumber);
       }}
       placeholder="~"
-      ref={inputRef}
       id={id}
       onKeyPress={onKeyPress}
       onKeyDown={onKeyDown}
       autoComplete="off"
     />
     {hasFocus 
-      ? <PianoKeyboard 
-          octave={3}
-          numberOfKeys={36}
-          hotKeys={[]} 
-          onNote = { e => {
-            handleChange(e.fullName)
-            if(onPianoPick)
-              onPianoPick();
-            playPitch(e.p);
-          } }
-          highlightKeys={internalParse.midiNumber ? [internalParse.midiNumber] : [] }
-          labelKeys
-        />
+      ? <span className="keyboardwrapper" style={pianoPositioner}>
+          <PianoKeyboard 
+            octave={3}
+            numberOfKeys={36}
+            hotKeys={[]} 
+            onNote = { e => {
+              handleChange(e.fullName)
+              if(onPianoPick)
+                onPianoPick();
+              playPitch(e.p);
+            } }
+            highlightKeys={internalParse.midiNumber ? [internalParse.midiNumber] : [] }
+            labelKeys
+          />
+        </span>
       : null}
   </div>
 }

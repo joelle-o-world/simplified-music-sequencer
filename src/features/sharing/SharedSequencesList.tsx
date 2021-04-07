@@ -19,8 +19,10 @@ export const SharedSequencesList: FunctionComponent = () => {
               <button onClick={() => dispatch(openSequence(id))} className="SharedSequenceOpen">open</button>
               <span>
                 <span className="SharedSequenceTitle">{title}</span> 
-                {" by "} 
-                <span className="SharedSequenceComposer">{composer}</span>
+                <span className="SharedSequenceCredit">
+                  {" by "} 
+                  <span className="SharedSequenceComposer">{composer}</span>
+                </span>
               </span>
             </li>
           )
