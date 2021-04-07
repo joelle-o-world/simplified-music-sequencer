@@ -70,3 +70,4 @@ export const synthPlay = (looping=false): AppThunk => async (dispatch, getState)
     dispatch(finishedPlaying());
   })
 }
+

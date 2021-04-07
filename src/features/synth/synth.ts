@@ -36,7 +36,6 @@ export class Synth extends EventEmitter {
 
   stop(t: number) {
     this.gain.gain.setTargetAtTime(0, t, 0.1)
-    this.osc.stop(t + 2);
   }
 
   gracefulStop(t: number) {
@@ -65,10 +64,22 @@ export class Synth extends EventEmitter {
   }
 }
 
+let persistantSynth: Synth;
+const getPersistantSynth = () => {
+  if(!persistantSynth)
+    persistantSynth = new Synth;
+  return persistantSynth
+}
+
+export function playPitch(midiNumber: number) {
+  let synth = getPersistantSynth();
+  synth.playNote(midiNumber, synth.ctx.currentTime);
+}
+
 export function playSequence(
   sequence:SequencerState, 
   options:{startTime?: number; looping?:boolean;}={},
-  synth = new Synth(),
+  synth = getPersistantSynth(),
 ) {
   const ctx = synth.ctx;
   const startTime = options.startTime || (ctx.currentTime+.3);

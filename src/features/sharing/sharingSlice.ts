@@ -2,6 +2,7 @@ import {SequencerState, setSequence} from '../sequencer/sequencerSlice';
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {RootState, AppThunk} from '../../app/store';
 import {listSequences, fetchSequenceData} from '../../client-api/publishSequence';
+import {synthPlay} from '../synth/synthSlice';
 
 export interface PublishedSequence {
   id: string;
@@ -60,6 +61,9 @@ export const openSequence = (id:string):AppThunk => async (dispatch, getState) =
       composer: getState().sequencer.composer,
       title: result.title + " edit"
     }));
+
+    if(!getState().synth.playing)
+      dispatch(synthPlay())
   } catch(err) {
     throw err;
   }

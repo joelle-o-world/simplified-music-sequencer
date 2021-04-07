@@ -6,13 +6,13 @@ import {ComposerField} from './features/sharing/UploadForm';
 import {DialogBox} from './components/DialogBox';
 
 function App() {
-  const [page, setPage] = useState('main');
+  const [page, setPage] = useState('chooseName');
 
   if(page === 'chooseName')
     return <div className="App">
       <DialogBox className="ChooseName">
         <p>Hello, what is your name?</p>
-        <ComposerField autoFocus />
+        <ComposerField autoFocus onEnterPress={() => setPage('main')} />
         <button className="RedButton" onClick={() => setPage('main')}>Begin</button>
       </DialogBox>
     </div>

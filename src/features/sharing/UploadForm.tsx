@@ -37,10 +37,18 @@ export const TitleField: FunctionComponent = () => {
   return <input onFocus={e => e.target.select()} value={title} onChange={e => {dispatch(setTitle(e.target.value))}}/>
 };
 
-export const ComposerField: FunctionComponent<{autoFocus?: boolean}> = ({autoFocus}) => {
+export const ComposerField: FunctionComponent<{autoFocus?: boolean; onEnterPress?: () => void}> = ({autoFocus, onEnterPress}) => {
   const dispatch = useDispatch();
   const {composer} = useSelector(selectSequencer);
-  return <input autoFocus={autoFocus} value={composer} onChange={e => {dispatch(setComposer(e.target.value))}} />
+  return <input 
+    autoFocus={autoFocus} 
+    value={composer} 
+    onChange={e => {dispatch(setComposer(e.target.value))}} 
+    onKeyPress={e => {
+      if(e.charCode === 13 && onEnterPress)
+        onEnterPress();
+    }}
+  />
 }
 
 export const UploadButton: FunctionComponent = () => {

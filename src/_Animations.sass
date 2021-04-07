@@ -6,10 +6,14 @@
   100%
     transform: scale(1)
 
+@mixin Twitch
+  animation: twitch .1s
+
 @mixin TwitchOnHover
   &:hover
-    animation: twitch .1s
+    @include Twitch
 
 @mixin TwitchOnFocus
   &:focus
-    animation: twitch .1s
+    @include Twitch
+

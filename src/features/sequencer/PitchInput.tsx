@@ -8,6 +8,9 @@ import parsePitch from './parsePitch';
 import PianoKeyboard from './PianoKeyboard';
 
 import './PitchInput.sass'
+import {playPitch} from '../synth/synth';
+import {useSelector} from 'react-redux';
+import {selectSynth} from '../synth/synthSlice';
 
 export const cssPitchClassNames = [
   'pitch-c',
@@ -46,6 +49,7 @@ export const PitchInput: FunctionComponent<PitchInputProps> = ({
   onPianoPick,
 }) => {
 
+  const {playing} = useSelector(selectSynth)
   const [hasFocus, setHasFocus] = useState(false)
 
   const [internalValue, setInternalValue] = useState('');
@@ -76,8 +80,14 @@ export const PitchInput: FunctionComponent<PitchInputProps> = ({
       onFocus={e => {
         setHasFocus(true)
         setTimeout(() => e.target.select(), 10)
+        if(internalParse.midiNumber !== undefined && !playing)
+          playPitch(internalParse.midiNumber);
       }}
       onBlur={() => setTimeout(() => setHasFocus(false), 50)}
+      onMouseOver={() => {
+        if(internalParse.midiNumber !== undefined && !playing)
+          playPitch(internalParse.midiNumber);
+      }}
       placeholder="~"
       ref={inputRef}
       id={id}
@@ -94,6 +104,7 @@ export const PitchInput: FunctionComponent<PitchInputProps> = ({
             handleChange(e.fullName)
             if(onPianoPick)
               onPianoPick();
+            playPitch(e.p);
           } }
           highlightKeys={internalParse.midiNumber ? [internalParse.midiNumber] : [] }
           labelKeys
