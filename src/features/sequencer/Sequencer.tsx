@@ -4,7 +4,6 @@ import {useSelector, useDispatch} from 'react-redux';
 import {selectSequencer, setNote, doubleSequence, setTempo} from './sequencerSlice';
 import {PitchParse} from './parsePitch';
 import PitchInput from './PitchInput';
-import {Synth, playSequence} from './synth';
 import classNames from 'classnames'
 import {IoPlaySharp } from 'react-icons/io5'
 import {IoIosSave} from 'react-icons/io';
@@ -12,6 +11,8 @@ import SharedSequencesList from '../sharing/SharedSequencesList'
 import {showUploadForm} from '../sharing/sharingSlice';
 import {UploadForm} from '../sharing/UploadForm';
 import SequencerInstructions from './Instructions';
+import {synthPlay, selectSynth} from '../synth/synthSlice';
+import {PlayButton, PlaybackButtons} from '../synth/PlaybackButtons';
 
 //import './Sequencer.sass'
 
@@ -21,32 +22,21 @@ const printTime = (t:number) => t%2 ? 'and' : String(Math.floor(t/2)%4 + 1);
 export const Sequencer: FunctionComponent = () => {
   const sequencer = useSelector(selectSequencer);
   const dispatch = useDispatch();
-  const [playingStep, setPlayingStep] = useState(null as null|number)
+
+  const {nowPlayingStep} = useSelector(selectSynth)
 
   const handlePlay = () => {
-    //let synth = new Synth();
-    //synth.playSequence(sequencer.steps, sequencer.tempo*2);
-    //synth.on('step', step => {
-      //setPlayingStep(step);
-    //});
-    let synth = playSequence({...sequencer, looped:true})
-    synth.events.on('step', step => {
-      setPlayingStep(step);
-      console.log('##', step);
-    })
+    dispatch(synthPlay())
   }
 
   return <div className="Sequencer">
     <UploadForm/>
     <div className="SequencerControls">
-    <button className="SequencerPlay" onClick={handlePlay}>
-      <IoPlaySharp className="button-icon"/>
-      Play
-    </button>
-    <button onClick={() => dispatch(showUploadForm())} className="SequencerUpload">
-      <IoIosSave/>
-      Upload
-    </button>
+      <PlaybackButtons/>
+      <button onClick={() => dispatch(showUploadForm())} className="SequencerUpload">
+        <IoIosSave/>
+        Upload
+      </button>
       <div className="SequencerTempo">
         <label>Tempo:</label>
         <input type="range" min="50" max="400" value={sequencer.tempo} onChange={e => dispatch(setTempo(Number(e.target.value)))} />
@@ -56,7 +46,7 @@ export const Sequencer: FunctionComponent = () => {
 
     <div className="SequencerSteps">
       {sequencer.steps.map((step, i) => ( 
-        <div className={classNames("SequencerStep", {nowPlaying: playingStep === i, barline: i%8 === 0})} key={i}>
+        <div className={classNames("SequencerStep", {nowPlaying: nowPlayingStep === i, barline: i%8 === 0})} key={i}>
           <span className="SequencerStepTime">{printTime(i)}</span>
           <PitchInput 
             value={step.str} 

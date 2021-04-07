@@ -30,6 +30,11 @@ $green: rgb(45,162,0)
   border-color: $brightRed
   color: $yellow
 
+@mixin YellowBlock
+  background-color: $yellow
+  border-color: $yellow
+  color: $brightRed
+
 @mixin GreenBlock
   background-color: $green
   border-color: $green
@@ -82,6 +87,18 @@ $green: rgb(45,162,0)
 
 
 
+.PlaybackButton
+  @include ButtonOverride
+  @include TwitchOnHover
+  &.PlayButton
+    @include CrimsonBlock
+  &.StopButton
+    @include CrimsonBlock
+  &.LoopButton
+    @include YellowBlock
+  &.UnloopButton
+    @include YellowBlock
+
 body
   @include MainFont
   @include BlackInputs
@@ -116,13 +133,9 @@ body
         bottom: 0px
         z-index: 50
         padding: 10px
+        font-size: 35px
         background-color: $bgBlue
-        .SequencerPlay
-          @include ButtonOverride
-          @include CrimsonBlock
-          @include TwitchOnHover
-          cursor: pointer
-          font-size: 35px
+        .PlaybackButton
           min-height: 50px
         .SequencerUpload
           @include ButtonOverride
@@ -154,7 +167,8 @@ body
             @include PurpleHightlight
             .SequencerStepInput
               @include PurpleHightlight
-              transform: scale(1.25)
+              input
+                transform: scale(1.25)
               z-index: 45
               border-color: white
           .SequencerStepTime

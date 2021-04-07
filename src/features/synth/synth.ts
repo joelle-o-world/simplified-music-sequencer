@@ -1,6 +1,6 @@
 import EventEmitter from "events";
-import {PitchParse} from "./parsePitch";
-import {SequencerState} from "./sequencerSlice";
+import {PitchParse} from "../sequencer/parsePitch";
+import {SequencerState} from "../sequencer/sequencerSlice";
 
 // @ts-ignore
 const AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -67,7 +67,7 @@ export class Synth extends EventEmitter {
 
 export function playSequence(
   sequence:SequencerState, 
-  options:{startTime?: number}={},
+  options:{startTime?: number; looping?:boolean;}={},
   synth = new Synth(),
 ) {
   const ctx = synth.ctx;
@@ -77,19 +77,29 @@ export function playSequence(
   }
 
   /// Number of steps to schedule at once
-  const scheduleChunkSize = 8;
+  const scheduleChunkSize = 1;
 
   const events = new EventEmitter();
 
   let nextStep = 0;
   let nextStepTime = startTime;
 
-  const scheduleFinish = (t: number) => {
+  let playing = true;
+  const stop = (t: number = nextStepTime) => {
+    playing = false
     synth.stop(t);
-    at(t, () => events.emit('finish'))
+    at(t+.2, () => events.emit('finish'))
   }
 
+  let looping = options.looping || false;
+  let setLooping = (val: boolean):void => {
+    looping = val
+  };
+
   const scheduleMore = () => {
+    if(!playing)
+      return ;
+    events.emit('schedule');
     const stepDuration = 60 / (sequence.tempo * (sequence.stepsPerBeat||2));
 
 
@@ -98,10 +108,10 @@ export function playSequence(
 
       // Handle looping / stopping at end
       if(nextStep >= sequence.steps.length) {
-        if(sequence.looped)
+        if(looping)
           nextStep = 0;
         else {
-          scheduleFinish(nextStepTime);
+          stop(nextStepTime);
           return ;
         }
       }
@@ -118,7 +128,7 @@ export function playSequence(
     }
 
     // Schedule next reshedule
-    at(nextStepTime - .1, () => scheduleMore());
+    at(nextStepTime - .03, () => scheduleMore());
   }
 
   const updateSequence = (seq: SequencerState) => {
@@ -131,6 +141,8 @@ export function playSequence(
 
   return {
     events,
+    setLooping,
+    stop,
     updateSequence,
   }
 }

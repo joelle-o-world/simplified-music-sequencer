@@ -10,7 +10,6 @@ export interface SequencerState {
   steps: PitchParse[];
   tempo: number;
   stepsPerBeat?: number;
-  looped?: boolean;
   title: string;
   composer: string;
 }
@@ -28,7 +27,6 @@ const initialState: SequencerState = {
   ],
   tempo: 140,
   stepsPerBeat: 2,
-  looped: true,
   title: "Untitled Sequence",
   composer: "",
 }
