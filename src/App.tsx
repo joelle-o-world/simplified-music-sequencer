@@ -19,7 +19,7 @@ function App() {
   else if(page === 'main')
     return (
       <div className="App">
-        <Sequencer />
+      <Sequencer horizontal /> 
       </div>
     );
 

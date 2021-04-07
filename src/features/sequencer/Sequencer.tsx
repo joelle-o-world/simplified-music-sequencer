@@ -19,7 +19,12 @@ import {PlayButton, PlaybackButtons} from '../synth/PlaybackButtons';
 // TODO: Replace this function with time signature variable
 const printTime = (t:number) => t%2 ? 'and' : String(Math.floor(t/2)%4 + 1);
 
-export const Sequencer: FunctionComponent = () => {
+interface SequencerProps {
+  horizontal?: boolean;
+  vertical?: boolean;
+}
+
+export const Sequencer: FunctionComponent<SequencerProps> = ({horizontal, vertical}) => {
   const sequencer = useSelector(selectSequencer);
   const dispatch = useDispatch();
 
@@ -29,21 +34,12 @@ export const Sequencer: FunctionComponent = () => {
     dispatch(synthPlay())
   }
 
-  return <div className="Sequencer">
-    <UploadForm/>
-    <div className="SequencerControls">
-      <PlaybackButtons/>
-      <button onClick={() => dispatch(showUploadForm())} className="SequencerUpload">
-        <IoIosSave/>
-        Upload
-      </button>
-      <div className="SequencerTempo">
-        <label>Tempo:</label>
-        <input type="range" min="50" max="400" value={sequencer.tempo} onChange={e => dispatch(setTempo(Number(e.target.value)))} />
-        <span>{sequencer.tempo}bpm</span>
-      </div>
-    </div>
+  const orientation = horizontal ? 'horizontal' : 'vertical'
 
+  return <div className={classNames("Sequencer", orientation)}>
+    <UploadForm/>
+    <SequencerInstructions />
+    <SequencerControls />
     <div className="SequencerSteps">
       {sequencer.steps.map((step, i) => ( 
         <div className={classNames("SequencerStep", {nowPlaying: nowPlayingStep === i, barline: i%8 === 0})} key={i}>
@@ -73,18 +69,33 @@ export const Sequencer: FunctionComponent = () => {
           }
         </div>
       ))}
-      <button className="SequencerAddSteps" onClick={() => dispatch(doubleSequence())}>{"+"}</button>
+      <button className="SequencerAddSteps" onClick={() => dispatch(doubleSequence())}>Add more steps</button>
     </div>
-    <div className="page">
-      <SequencerInstructions />
-      <SharedSequencesList />
-    </div>
+    <SharedSequencesList />
   </div>
 }
 
 export default Sequencer;
 
+export const SequencerControls: FunctionComponent = () => {
+  const dispatch = useDispatch();
+  const sequencer = useSelector(selectSequencer);
+  return <div className="SequencerControls">
+    <PlaybackButtons/>
+    <button onClick={() => dispatch(showUploadForm())} className="SequencerUpload">
+      <IoIosSave/>
+      Upload
+    </button>
+    <div className="SequencerTempo">
+      <label>Tempo:</label>
+      <input type="range" min="50" max="400" value={sequencer.tempo} onChange={e => dispatch(setTempo(Number(e.target.value)))} />
+      <span>{sequencer.tempo}bpm</span>
+    </div>
+  </div>
+}
+
 export interface SequencerStepProps {
+  
   note: PitchParse;
   timeIndex?: number;
   onChange?: (e: string) => void;

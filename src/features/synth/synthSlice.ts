@@ -50,10 +50,14 @@ export default synthSlice.reducer
 export const selectSynth = (state: RootState) => state.synth;
 
 export const synthPlay = (looping=false): AppThunk => async (dispatch, getState) => {
+  let wasPlaying = getState().synth.playing;
   if(looping)
     dispatch(startLooping())
   else
     dispatch(startPlaying())
+
+  if(wasPlaying)
+    return ;
 
   const sequence = getState().sequencer;
   const {events, updateSequence, setLooping, stop} = playSequence(sequence, {looping})
