@@ -1,6 +1,7 @@
 import React, {useRef} from 'react'
 import {FunctionComponent, useState} from 'react';
 import classNames from 'classnames';
+import {isMobile, isTablet} from 'react-device-detect';
 
 import {PitchParse} from './parsePitch';
 import parsePitch from './parsePitch';
@@ -88,7 +89,6 @@ export const PitchInput: FunctionComponent<PitchInputProps> = ({
       }, cssPitchClass)}
       onChange={ e => handleChange(e.target.value) }
       onFocus={e => {
-        e.preventDefault();
         setHasFocus(true)
         setTimeout(() => e.target.select(), 10)
         if(internalParse.midiNumber !== undefined && !playing)
@@ -99,6 +99,7 @@ export const PitchInput: FunctionComponent<PitchInputProps> = ({
         if(internalParse.midiNumber !== undefined && !playing)
           playPitch(internalParse.midiNumber);
       }}
+      readOnly={isMobile || isTablet}
       placeholder="~"
       id={id}
       onKeyPress={onKeyPress}
