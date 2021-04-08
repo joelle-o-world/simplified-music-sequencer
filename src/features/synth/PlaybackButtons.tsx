@@ -4,11 +4,11 @@ import {IoPlaySharp, IoStopSharp} from 'react-icons/io5';
 import {synthPlay, selectSynth, stopPlaying, unloop} from './synthSlice';
 import {ImLoop} from 'react-icons/im/'
 
-export const PlayButton: FunctionComponent = () => {
+export const PlayButton: FunctionComponent<{loop?:boolean}> = ({loop=false}) => {
   const dispatch = useDispatch();
   const {playing} = useSelector(selectSynth);
   if(!playing)
-    return <button className="PlaybackButton PlayButton" onClick={() => dispatch(synthPlay(false))}><IoPlaySharp/>Play</button>
+    return <button className="PlaybackButton PlayButton" onClick={() => dispatch(synthPlay(loop))}><IoPlaySharp/>Play</button>
   else
     return <button className="PlaybackButton StopButton" onClick={() => dispatch(stopPlaying())}><IoStopSharp/>Stop</button>
 }
@@ -23,6 +23,5 @@ export const LoopButton: FunctionComponent = () => {
 }
 
 export const PlaybackButtons: FunctionComponent = () => <>
-  <PlayButton/>
-  <LoopButton/>
+  <PlayButton loop/>
 </>

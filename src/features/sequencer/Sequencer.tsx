@@ -39,7 +39,7 @@ export const Sequencer: FunctionComponent<SequencerProps> = ({horizontal, vertic
   return <div className={classNames("Sequencer", orientation)}>
     <UploadForm/>
     <SequencerInstructions />
-    <div className="SequencerSteps">
+    <div className="SequencerSteps" id="SequencerSteps">
       {sequencer.steps.map((step, i) => ( 
         <div className={classNames("SequencerStep", {nowPlaying: nowPlayingStep === i, barline: i%8 === 0})} key={i}>
           <span className="SequencerStepTime">{printTime(i)}</span>
