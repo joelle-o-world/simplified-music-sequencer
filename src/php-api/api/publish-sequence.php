@@ -26,7 +26,8 @@
 
   // Append line to index
   $indexFileHandle = fopen($sequencesIndexPath, 'a');
-  $newIndexRow = $sequenceId . "\t" . $composer ."\t". $title;
+  $date = date("Y-m-d h:i:sa");
+  $newIndexRow = $sequenceId . "\t" . $composer ."\t". $title . "\t".$date;
   fwrite($indexFileHandle, $newIndexRow."\n");
 
   // Save actual file
