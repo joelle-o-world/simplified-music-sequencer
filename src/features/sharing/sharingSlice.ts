@@ -47,7 +47,7 @@ export const {setPublishedSequences, showUploadForm, hideUploadForm} = sharingSl
 export const refreshSequencesIndex = ():AppThunk => async (dispatch) => {
   try {
     let result = await listSequences();
-    dispatch(setPublishedSequences(result));
+    dispatch(setPublishedSequences(result.reverse()));
   } catch(err) {
     throw err;
   }
