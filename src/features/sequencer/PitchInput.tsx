@@ -88,6 +88,7 @@ export const PitchInput: FunctionComponent<PitchInputProps> = ({
       }, cssPitchClass)}
       onChange={ e => handleChange(e.target.value) }
       onFocus={e => {
+        e.preventDefault();
         setHasFocus(true)
         setTimeout(() => e.target.select(), 10)
         if(internalParse.midiNumber !== undefined && !playing)

@@ -2,13 +2,17 @@
   
   include "./config.php";
 
+  function escape($raw) {
+    return preg_replace('/[^A-Za-z0-9_\-]/', '_', $raw);
+  }
+
   $sequenceData = $_POST['sequence'];
-  $title = $_POST['title'];
-  $composer = $_POST['composer'];
+  $title = escape($_POST['title']);
+  $composer = escape($_POST['composer']);
 
-  $sequenceId = "$composer-$title";
+  $sequenceId = "sequence_$composer_$title";
 
-  $filename = "$sequenceName.json";
+  $filename = "$sequenceId.json";
   $filepath = "$sequencesStorePath/$filename";
   $n = 0;
   while(file_exists($filepath)) {

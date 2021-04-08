@@ -19,7 +19,10 @@ function App() {
   else if(page === 'main')
     return (
       <div className="App">
-      <Sequencer horizontal /> 
+        <Sequencer horizontal /> 
+        <footer>
+          made by <a href="http://joel.forsale">joel</a> -- <a href="https://github.com/joelyjoel/simplified-music-sequencer">view source code</a>
+        </footer>
       </div>
     );
 

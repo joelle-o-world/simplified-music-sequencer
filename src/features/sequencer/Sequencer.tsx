@@ -39,7 +39,6 @@ export const Sequencer: FunctionComponent<SequencerProps> = ({horizontal, vertic
   return <div className={classNames("Sequencer", orientation)}>
     <UploadForm/>
     <SequencerInstructions />
-    <SequencerControls />
     <div className="SequencerSteps">
       {sequencer.steps.map((step, i) => ( 
         <div className={classNames("SequencerStep", {nowPlaying: nowPlayingStep === i, barline: i%8 === 0})} key={i}>
@@ -71,6 +70,7 @@ export const Sequencer: FunctionComponent<SequencerProps> = ({horizontal, vertic
       ))}
       <button className="SequencerAddSteps" onClick={() => dispatch(doubleSequence())}>Add more steps</button>
     </div>
+    <SequencerControls />
     <SharedSequencesList />
   </div>
 }
@@ -94,39 +94,3 @@ export const SequencerControls: FunctionComponent = () => {
   </div>
 }
 
-export interface SequencerStepProps {
-  
-  note: PitchParse;
-  timeIndex?: number;
-  onChange?: (e: string) => void;
-  timeLabel?: string;
-  isNowPlaying?: boolean;
-}
-
-export const SequencerStep: FunctionComponent<SequencerStepProps> = ({
-  note,
-  onChange,
-  timeLabel,
-  isNowPlaying = false,
-}) => {
-  return <div className={classNames("SequencerStep", {nowPlaying: isNowPlaying})}>
-
-    {timeLabel !== undefined
-      ? <span className="SequencerStepTime">{timeLabel}</span>
-      : null
-    }
-
-
-    <PitchInput 
-      value={note.str} 
-      onChange={(e: any) => onChange ? onChange(e) : null} 
-      className="SequencerStepInput"
-    />
-
-    {note.errorMessage 
-      ? <span className="parse-error">{note.errorMessage}</span> 
-      : null
-    }
-
-  </div>
-}
