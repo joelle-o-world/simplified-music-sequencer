@@ -12,7 +12,8 @@ $purple: rgb(170,6,170)
 $gray: rgb(170, 170, 170)
 $dullRed: rgb(170, 3, 0)
 $brightRed: rgb(170, 3, 0)
-$yellow: rgb(253, 255, 85)
+$yellow: rgba(253, 255, 85)
+$yellowOpaque: rgba(253, 255, 85, .99)
 $teal: rgb(52,170,170)
 $green: rgb(45,162,0)
 
@@ -61,17 +62,31 @@ $green: rgb(45,162,0)
   .float-left
     float: left
 
+  figure.small-center
+    display: flex
+    align-items: center
+    justify-content: center
+    flex-wrap: wrap
+    figcaption
+      max-width: 400px
+    img
+      max-width: 400px
+      margin: 10px
+      height: auto
+
+    
   figure
     position: relative
     >figcaption
       background-color: white
       color: black
       padding: 10px
-      @media screen and (min-width: 768px)
-        position: absolute
-        bottom: 20px
-        right: 20px
-        left: 20px
+      &.insetOnFigure
+        @media screen and (min-width: 768px)
+          position: absolute
+          bottom: 20px
+          right: 20px
+          left: 20px
 
 @mixin PurpleHightlight
   background-color: $purple
@@ -193,6 +208,13 @@ body
   color: $gray
   margin: 10px
   font-size: 25px
+  ::selection
+    color: black
+    background: $yellowOpaque
+    opacity: 1
+  ::-moz-selection
+    color: black
+    background: $yellowOpaque
   :link, :visited
     color: $teal
 
