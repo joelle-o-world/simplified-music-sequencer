@@ -9,10 +9,11 @@ import {IoPlaySharp } from 'react-icons/io5'
 import {IoIosSave} from 'react-icons/io';
 import SharedSequencesList from '../sharing/SharedSequencesList'
 import {showUploadForm} from '../sharing/sharingSlice';
-import {UploadForm} from '../sharing/UploadForm';
+import {UploadForm, UploadButton} from '../sharing/UploadForm';
 import SequencerInstructions from './Instructions';
 import {synthPlay, selectSynth} from '../synth/synthSlice';
 import {PlayButton, PlaybackButtons} from '../synth/PlaybackButtons';
+import {SequencerHistory} from '../../components/SequencerHistory';
 
 //import './Sequencer.sass'
 
@@ -72,6 +73,7 @@ export const Sequencer: FunctionComponent<SequencerProps> = ({horizontal, vertic
     </div>
     <SequencerControls />
     <SharedSequencesList />
+    <SequencerHistory/>
   </div>
 }
 
@@ -82,10 +84,7 @@ export const SequencerControls: FunctionComponent = () => {
   const sequencer = useSelector(selectSequencer);
   return <div className="SequencerControls">
     <PlaybackButtons/>
-    <button onClick={() => dispatch(showUploadForm())} className="SequencerUpload">
-      <IoIosSave/>
-      Upload
-    </button>
+    <UploadButton/>
     <div className="SequencerTempo">
       <label>Tempo:</label>
       <input type="range" min="50" max="400" value={sequencer.tempo} onChange={e => dispatch(setTempo(Number(e.target.value)))} />

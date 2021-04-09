@@ -20,6 +20,59 @@ $green: rgb(45,162,0)
   border: 3px solid $dullRed
   margin: 3px
 
+@mixin TextSection
+  @include RedBorder
+  @include MutedBlock
+  padding: 20px
+  font-size: 35px
+  section
+    clear: both
+  p
+    strong
+      font-size: 200%
+  hgroup
+    h1
+      @include CrimsonBlock
+      text-align: center
+      font-size: 50px
+      margin: 0px
+      padding: 4px
+    h2
+      @include TealBlock
+      text-align: center
+      font-size: 35px
+      padding: 4px
+      margin: 0px
+      text-decoration: none
+  ol
+    margin-left: 30px
+  .side-by-side
+    display: flex
+    flex-direction: row
+    //flex-wrap: wrap
+    align-items: center
+    justify-content: space-between
+    img
+      flex-basis: 50%
+  img
+    max-width: 100%
+  .float-right
+    float: right
+  .float-left
+    float: left
+
+  figure
+    position: relative
+    >figcaption
+      background-color: white
+      color: black
+      padding: 10px
+      @media screen and (min-width: 768px)
+        position: absolute
+        bottom: 20px
+        right: 20px
+        left: 20px
+
 @mixin PurpleHightlight
   background-color: $purple
   border-color: $purple
@@ -87,8 +140,27 @@ $green: rgb(45,162,0)
   @include InputOverride
   cursor: pointer
   margin: 5px
-  &:hover
+  &:hover:not(:disabled)
     @include PurpleHightlight
+  &:disabled
+    &:hover
+      opacity: 1
+    opacity: .7
+    cursor: not-allowed
+
+  position: relative
+  .hover-info
+    @include YellowBlock
+    position: absolute
+    bottom: 100%
+    left: -20px
+    right: -20px
+    display: none
+  &:hover .hover-info
+    display: block
+    animation: Boing .5s
+    transform-origin: bottom center
+    opacity: 1
 
 
 @mixin EightFourTwoOne($w)
@@ -122,7 +194,7 @@ body
   margin: 10px
   font-size: 25px
   :link, :visited
-    color: $gray
+    color: $teal
 
   .ChooseName.DialogBox
     font-size: 45px
@@ -155,7 +227,7 @@ body
         background-color: $bgBlue
         .PlaybackButton
           min-height: 50px
-        .SequencerUpload
+        .SequencerUploadButton
           @include ButtonOverride
           @include TwitchOnHover
           @include GreenBlock
@@ -246,6 +318,9 @@ body
           font-size: 25px
           margin: 50px
           color: $teal
+          border-color: $teal
+          padding-right: 15px
+          padding-left: 15px
           cursor: pointer
           &:hover
             background-color: $teal
@@ -276,7 +351,7 @@ body
             letter-spacing: 10px
           input, label
             font-size: 25px
-        .UploadFormSubmit
+        .SequencerUploadButton
           float: right
           @include ButtonOverride
           @include TwitchOnHover
@@ -293,26 +368,10 @@ body
           min-height: 50px
 
 
+    .SequencerHistory
+      @include TextSection
     .SequencerInstructions
-      @include RedBorder
-      @include MutedBlock
-      padding: 20px
-      font-size: 35px
-      hgroup
-        h1
-          @include CrimsonBlock
-          text-align: center
-          font-size: 50px
-          margin: 0px
-          padding: 4px
-        h2
-          @include TealBlock
-          text-align: center
-          font-size: 35px
-          padding: 4px
-          margin: 0px
-      ol
-        margin-left: 30px
+      @include TextSection
 
     .SharedSequencesListWrapper
       @include RedBorder

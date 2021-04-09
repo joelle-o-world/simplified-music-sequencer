@@ -1,7 +1,7 @@
 import React, {FunctionComponent, } from 'react';
 import {IoIosSave, IoIosClose} from 'react-icons/io';
 import {useSelector, useDispatch} from 'react-redux';
-import {selectSharing, hideUploadForm} from './sharingSlice';
+import {selectSharing, hideUploadForm, showUploadForm} from './sharingSlice';
 import {selectSequencer, setComposer, setTitle, publish} from '../sequencer/sequencerSlice';
 
 export const UploadForm: FunctionComponent = () => {
@@ -53,5 +53,23 @@ export const ComposerField: FunctionComponent<{autoFocus?: boolean; onEnterPress
 
 export const UploadButton: FunctionComponent = () => {
   const dispatch = useDispatch();
-  return <button className="UploadFormSubmit" onClick={() => {dispatch(publish())}}><IoIosSave/>Upload</button>
+  const sharing = useSelector(selectSharing);
+  const sequencer = useSelector(selectSequencer);
+  return <button 
+    className="SequencerUploadButton" 
+    disabled={!sequencer.edited}
+    onClick={() => {
+      if(sharing.showingUploadForm)
+        dispatch(publish())
+      else
+        dispatch(showUploadForm())
+    }
+  }>
+    <IoIosSave/>
+    Upload
+    { !sequencer.edited
+      ? <span className="hover-info">You need to edit the sequence before you can upload it</span>
+      : null
+    }
+  </button>
 }

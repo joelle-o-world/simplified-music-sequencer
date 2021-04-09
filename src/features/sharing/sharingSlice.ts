@@ -59,7 +59,8 @@ export const openSequence = (id:string):AppThunk => async (dispatch, getState) =
     dispatch(setSequence({
       ...result,
       composer: getState().sequencer.composer,
-      title: result.title + " edit"
+      title: `reply to ${result.composer}`,
+      edited: false,
     }));
 
     if(!getState().synth.playing)

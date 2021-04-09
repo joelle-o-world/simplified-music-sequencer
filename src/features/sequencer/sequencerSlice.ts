@@ -12,6 +12,7 @@ export interface SequencerState {
   stepsPerBeat?: number;
   title: string;
   composer: string;
+  edited?: boolean;
 }
 
 const initialState: SequencerState = {
@@ -29,6 +30,7 @@ const initialState: SequencerState = {
   stepsPerBeat: 2,
   title: "Untitled Sequence",
   composer: "",
+  edited: false,
 }
 
 export const sequencerSlice = createSlice({
@@ -48,6 +50,8 @@ export const sequencerSlice = createSlice({
         state.steps[action.payload.stepIndex] = parsePitch(newNote);
       else
         state.steps[action.payload.stepIndex] = newNote
+
+      state.edited = true;
     },
 
     clearNote: (state, action: PayloadAction<number>) => {
@@ -56,6 +60,7 @@ export const sequencerSlice = createSlice({
       }
 
       state.steps[action.payload] = parsePitch('');
+      state.edited = true;
     },
 
     addSteps: (state, action: PayloadAction<number>) => {

@@ -10,7 +10,7 @@
   animation: twitch .1s
 
 @mixin TwitchOnHover
-  &:hover
+  &:hover:not(:disabled)
     @include Twitch
 
 @mixin TwitchOnFocus
