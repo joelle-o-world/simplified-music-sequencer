@@ -31,6 +31,8 @@ $green: rgb(45,162,0)
   p
     strong
       font-size: 200%
+    strong.butNotHuge
+      font-size: 150%
   hgroup
     h1
       @include CrimsonBlock
@@ -45,6 +47,8 @@ $green: rgb(45,162,0)
       padding: 4px
       margin: 0px
       text-decoration: none
+  h1
+    text-align: center
   ol
     margin-left: 30px
   .side-by-side
@@ -57,10 +61,17 @@ $green: rgb(45,162,0)
       flex-basis: 50%
   img
     max-width: 100%
-  .float-right
-    float: right
-  .float-left
-    float: left
+  @media screen and (min-width: 1200px)
+    .float-right
+      float: right
+    .float-left
+      float: left
+  @media screen and (max-width: 1199px)
+    .float-right, .float-left
+      display: block
+      margin-right: auto
+      margin-left: auto
+      max-width: 600px
 
   figure.small-center
     display: flex
@@ -77,6 +88,9 @@ $green: rgb(45,162,0)
     
   figure
     position: relative
+    max-width: 600px
+    iframe
+      max-width: 100%
     >figcaption
       background-color: white
       color: black
