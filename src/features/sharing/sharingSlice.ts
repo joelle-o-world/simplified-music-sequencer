@@ -2,6 +2,7 @@ import {SequencerState, setSequence} from '../sequencer/sequencerSlice';
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {RootState, AppThunk} from '../../app/store';
 import {listSequences, fetchSequenceData} from '../../client-api/publishSequence';
+import {synthPlay} from '../synth/synthSlice';
 
 export interface PublishedSequence {
   id: string;
@@ -46,16 +47,24 @@ export const {setPublishedSequences, showUploadForm, hideUploadForm} = sharingSl
 export const refreshSequencesIndex = ():AppThunk => async (dispatch) => {
   try {
     let result = await listSequences();
-    dispatch(setPublishedSequences(result));
+    dispatch(setPublishedSequences(result.reverse()));
   } catch(err) {
     throw err;
   }
 }
 
-export const openSequence = (id:string):AppThunk => async (dispatch) => {
+export const openSequence = (id:string):AppThunk => async (dispatch, getState) => {
   try {
     let result = await fetchSequenceData(id)
-    dispatch(setSequence(result));
+    dispatch(setSequence({
+      ...result,
+      composer: getState().sequencer.composer,
+      title: `reply to ${result.composer}`,
+      edited: false,
+    }));
+
+    if(!getState().synth.playing)
+      dispatch(synthPlay())
   } catch(err) {
     throw err;
   }

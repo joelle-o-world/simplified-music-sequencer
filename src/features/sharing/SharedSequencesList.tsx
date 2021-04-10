@@ -2,6 +2,15 @@ import React, {FunctionComponent, useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import {selectSharing, refreshSequencesIndex, openSequence} from './sharingSlice';
 
+function scrollToSequencerSteps() {
+  let div = document.getElementById('SequencerSteps');
+  if(div)
+    div.scrollIntoView({
+      block: 'start',
+      behavior: 'smooth',
+    })
+}
+
 export const SharedSequencesList: FunctionComponent = () => {
   const sharingState = useSelector(selectSharing);
   const dispatch = useDispatch();
@@ -16,11 +25,16 @@ export const SharedSequencesList: FunctionComponent = () => {
         {
           sharingState.publishedSequences.map(
             ({id, title, composer}) => <li key={id} className="SharedSequence">
-              <button onClick={() => dispatch(openSequence(id))} className="SharedSequenceOpen">open</button>
+              <button onClick={() => {
+                dispatch(openSequence(id))
+                scrollToSequencerSteps();
+              }} className="SharedSequenceOpen">open</button>
               <span>
                 <span className="SharedSequenceTitle">{title}</span> 
-                {" by "} 
-                <span className="SharedSequenceComposer">{composer}</span>
+                <span className="SharedSequenceCredit">
+                  {" by "} 
+                  <span className="SharedSequenceComposer">{composer}</span>
+                </span>
               </span>
             </li>
           )

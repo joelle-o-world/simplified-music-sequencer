@@ -1,108 +1,95 @@
 import React, {useState} from 'react';
 import {FunctionComponent} from "react";
 import {useSelector, useDispatch} from 'react-redux';
-import {selectSequencer, setNote, doubleSequence, setTempo, publish} from './sequencerSlice';
+import {selectSequencer, setNote, doubleSequence, setTempo} from './sequencerSlice';
 import {PitchParse} from './parsePitch';
 import PitchInput from './PitchInput';
-import {Synth} from './synth';
 import classNames from 'classnames'
 import {IoPlaySharp } from 'react-icons/io5'
 import {IoIosSave} from 'react-icons/io';
 import SharedSequencesList from '../sharing/SharedSequencesList'
 import {showUploadForm} from '../sharing/sharingSlice';
-import {UploadForm} from '../sharing/UploadForm';
+import {UploadForm, UploadButton} from '../sharing/UploadForm';
 import SequencerInstructions from './Instructions';
+import {synthPlay, selectSynth} from '../synth/synthSlice';
+import {PlayButton, PlaybackButtons} from '../synth/PlaybackButtons';
+import {SequencerHistory} from '../../components/SequencerHistory';
 
 //import './Sequencer.sass'
 
 // TODO: Replace this function with time signature variable
 const printTime = (t:number) => t%2 ? 'and' : String(Math.floor(t/2)%4 + 1);
 
-export const Sequencer: FunctionComponent = () => {
+interface SequencerProps {
+  horizontal?: boolean;
+  vertical?: boolean;
+}
+
+export const Sequencer: FunctionComponent<SequencerProps> = ({horizontal, vertical}) => {
   const sequencer = useSelector(selectSequencer);
   const dispatch = useDispatch();
-  const [playingStep, setPlayingStep] = useState(null as null|number)
+
+  const {nowPlayingStep} = useSelector(selectSynth)
 
   const handlePlay = () => {
-    let synth = new Synth();
-    synth.playSequence(sequencer.steps, sequencer.tempo*2);
-    synth.on('step', step => {
-      setPlayingStep(step);
-    });
+    dispatch(synthPlay())
   }
 
-  return <div className="Sequencer">
-    <UploadForm/>
-    <div className="SequencerControls">
-    <button className="SequencerPlay" onClick={handlePlay}>
-      <IoPlaySharp className="button-icon"/>
-      Play
-    </button>
-    <button onClick={() => dispatch(showUploadForm())} className="SequencerUpload">
-      <IoIosSave/>
-      Upload
-    </button>
-      <div className="SequencerTempo">
-        <label>Tempo:</label>
-        <input type="range" min="50" max="400" value={sequencer.tempo} onChange={e => dispatch(setTempo(Number(e.target.value)))} />
-        <span>{sequencer.tempo}bpm</span>
-      </div>
-    </div>
+  const orientation = horizontal ? 'horizontal' : 'vertical'
 
-    <div className="SequencerSteps">
+  return <div className={classNames("Sequencer", orientation)}>
+    <UploadForm/>
+    <SequencerInstructions />
+    <div className="SequencerSteps" id="SequencerSteps">
       {sequencer.steps.map((step, i) => ( 
-        <SequencerStep 
-          note={step} 
-          key={i} 
-          timeIndex={i}
-          timeLabel={printTime(i)}
-          isNowPlaying={playingStep === i}
-          onChange={val => dispatch(setNote({stepIndex: i, newNote: val}))}
-        /> 
+        <div className={classNames("SequencerStep", {nowPlaying: nowPlayingStep === i, barline: i%8 === 0})} key={i}>
+          <span className="SequencerStepTime">{printTime(i)}</span>
+          <PitchInput 
+            value={step.str} 
+            onChange={val => dispatch(setNote({stepIndex: i, newNote: val}))} 
+            className="SequencerStepInput"
+            id={"SequencerStepPitch-"+i}
+            onKeyDown={(e) => {
+              if(e.key === "ArrowDown" || e.key === "j") {
+                e.preventDefault();
+                let el = document.getElementById("SequencerStepPitch-" + (i+1)%sequencer.steps.length);
+                if(el)
+                  el.focus();
+              } else if(e.key === "ArrowUp" || e.key === "k") {
+                e.preventDefault()
+                let el = document.getElementById("SequencerStepPitch-" + (i-1+sequencer.steps.length)%sequencer.steps.length);
+                if(el)
+                  el.focus();
+              }
+            }}
+          />
+          {step.errorMessage 
+            ? <span className="parse-error">{step.errorMessage}</span> 
+            : null
+          }
+        </div>
       ))}
-      <button className="SequencerAddSteps" onClick={() => dispatch(doubleSequence())}>{"+"}</button>
+      <button className="SequencerAddSteps" onClick={() => dispatch(doubleSequence())}>Add more steps</button>
     </div>
-    <div className="page">
-      <SequencerInstructions />
-      <SharedSequencesList />
-    </div>
+    <SequencerControls />
+    <SharedSequencesList />
+    <SequencerHistory/>
   </div>
 }
 
 export default Sequencer;
 
-export interface SequencerStepProps {
-  note: PitchParse;
-  timeIndex?: number;
-  onChange?: (e: string) => void;
-  timeLabel?: string;
-  isNowPlaying?: boolean;
-}
-
-export const SequencerStep: FunctionComponent<SequencerStepProps> = ({
-  note,
-  onChange,
-  timeLabel,
-  isNowPlaying = false,
-}) => {
-  return <div className={classNames("SequencerStep", {nowPlaying: isNowPlaying})}>
-
-    {timeLabel !== undefined
-      ? <span className="SequencerStepTime">{timeLabel}</span>
-      : null
-    }
-
-
-    <PitchInput 
-      value={note.str} 
-      onChange={(e: any) => onChange ? onChange(e) : null} 
-      className="SequencerStepInput"
-    />
-
-    {note.errorMessage 
-      ? <span className="parse-error">{note.errorMessage}</span> 
-      : null
-    }
-
+export const SequencerControls: FunctionComponent = () => {
+  const dispatch = useDispatch();
+  const sequencer = useSelector(selectSequencer);
+  return <div className="SequencerControls">
+    <PlaybackButtons/>
+    <UploadButton/>
+    <div className="SequencerTempo">
+      <label>Tempo:</label>
+      <input type="range" min="50" max="400" value={sequencer.tempo} onChange={e => dispatch(setTempo(Number(e.target.value)))} />
+      <span>{sequencer.tempo}bpm</span>
+    </div>
   </div>
 }
+
