@@ -11,6 +11,8 @@ import {synthPlay, selectSynth} from '../synth/synthSlice';
 import {PlaybackButtons} from '../synth/PlaybackButtons';
 import {SequencerHistory} from '../../components/SequencerHistory';
 import {ErrorNotifications} from '../errors/ErrorNotifications';
+import {selectSharing} from '../sharing/sharingSlice';
+import LoadingSequence from '../sharing/LoadingSequence';
 
 //import './Sequencer.sass'
 
@@ -23,12 +25,9 @@ interface SequencerProps {
 }
 
 export const Sequencer: FunctionComponent<SequencerProps> = ({horizontal, vertical}) => {
-  const sequencer = useSelector(selectSequencer);
-  const dispatch = useDispatch();
 
-  
+  const {currentlyLoadingASequence} = useSelector(selectSharing)
 
-  const {nowPlayingStep} = useSelector(selectSynth)
 
   const orientation = horizontal ? 'horizontal' : 'vertical'
 
@@ -36,7 +35,37 @@ export const Sequencer: FunctionComponent<SequencerProps> = ({horizontal, vertic
     <ErrorNotifications/>
     <UploadForm/>
     <SequencerInstructions />
-    <div className="SequencerSteps" id="SequencerSteps">
+    { currentlyLoadingASequence
+      ? <LoadingSequence/>
+      : <SequencerSteps />
+    }
+    <SequencerControls />
+    <SharedSequencesList />
+    <SequencerHistory/>
+  </div>
+}
+
+export default Sequencer;
+
+export const SequencerControls: FunctionComponent = () => {
+  const dispatch = useDispatch();
+  const sequencer = useSelector(selectSequencer);
+  return <div className="SequencerControls">
+    <PlaybackButtons/>
+    <UploadButton/>
+    <div className="SequencerTempo">
+      <label>Tempo:</label>
+      <input type="range" min="50" max="400" value={sequencer.tempo} onChange={e => dispatch(setTempo(Number(e.target.value)))} />
+      <span>{sequencer.tempo}bpm</span>
+    </div>
+  </div>
+}
+
+export const SequencerSteps: FunctionComponent = () => {
+  const sequencer = useSelector(selectSequencer);
+  const dispatch = useDispatch();
+  const {nowPlayingStep} = useSelector(selectSynth)
+  return <div className="SequencerSteps" id="SequencerSteps">
       {sequencer.steps.map((step, i) => ( 
         <div className={classNames("SequencerStep", {nowPlaying: nowPlayingStep === i, barline: i%8 === 0})} key={i}>
           <span className="SequencerStepTime">{printTime(i)}</span>
@@ -67,25 +96,4 @@ export const Sequencer: FunctionComponent<SequencerProps> = ({horizontal, vertic
       ))}
       <button className="SequencerAddSteps" onClick={() => dispatch(doubleSequence())}>Add more steps</button>
     </div>
-    <SequencerControls />
-    <SharedSequencesList />
-    <SequencerHistory/>
-  </div>
-}
-
-export default Sequencer;
-
-export const SequencerControls: FunctionComponent = () => {
-  const dispatch = useDispatch();
-  const sequencer = useSelector(selectSequencer);
-  return <div className="SequencerControls">
-    <PlaybackButtons/>
-    <UploadButton/>
-    <div className="SequencerTempo">
-      <label>Tempo:</label>
-      <input type="range" min="50" max="400" value={sequencer.tempo} onChange={e => dispatch(setTempo(Number(e.target.value)))} />
-      <span>{sequencer.tempo}bpm</span>
-    </div>
-  </div>
-}
-
+};

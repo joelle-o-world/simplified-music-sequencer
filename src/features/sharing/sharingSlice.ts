@@ -16,12 +16,16 @@ export interface SharingState {
   publishedSequences: PublishedSequence[];
   isRefreshing: boolean;
   showingUploadForm: boolean;
+  currentlyLoadingASequence: boolean;
+  currentlyLoadingSequence: string|null;
 }
 
 const initialState: SharingState = {
   publishedSequences: [],
   isRefreshing: false,
   showingUploadForm: false,
+  currentlyLoadingASequence: false,
+  currentlyLoadingSequence: null,
 }
 
 export const sharingSlice = createSlice({
@@ -39,11 +43,24 @@ export const sharingSlice = createSlice({
     hideUploadForm: state => {
       state.showingUploadForm = false;
     },
+
+    startedLoading: (state, action: PayloadAction<string>) => {
+      state.currentlyLoadingASequence = true
+      state.currentlyLoadingSequence = action.payload
+    },
+
+    finishedLoading: state => {
+      state.currentlyLoadingASequence = false;
+    },
+
+    errorLoading: state => {
+      state.currentlyLoadingASequence = false;
+    },
   },
 })
 export default sharingSlice.reducer;
 
-export const {setPublishedSequences, showUploadForm, hideUploadForm} = sharingSlice.actions;
+export const {setPublishedSequences, showUploadForm, hideUploadForm, startedLoading, finishedLoading, errorLoading} = sharingSlice.actions;
 
 export const refreshSequencesIndex = ():AppThunk => async (dispatch) => {
   try {
@@ -54,8 +71,9 @@ export const refreshSequencesIndex = ():AppThunk => async (dispatch) => {
   }
 }
 
-export const openSequence = (id:string):AppThunk => async (dispatch, getState) => {
+export const openSequence = (id:string, playOnceLoaded=false):AppThunk => async (dispatch, getState) => {
   try {
+    dispatch(startedLoading(id));
     let result = await fetchSequenceData(id)
     dispatch(setSequence({
       ...result,
@@ -64,10 +82,16 @@ export const openSequence = (id:string):AppThunk => async (dispatch, getState) =
       edited: false,
     }));
 
-    if(!getState().synth.playing)
+    dispatch(finishedLoading())
+
+    if(playOnceLoaded && !getState().synth.playing)
       dispatch(synthPlay())
+    
+
   } catch(err) {
-    dispatch(errorNotification("There was a problem opening the sequence"))
+    console.error(err);
+    dispatch(errorNotification("There was a problem opening the sequence: "+id))
+    dispatch(errorLoading());
   }
 }
 

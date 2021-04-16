@@ -88,7 +88,7 @@ export function playSequence(
   }
 
   /// Number of steps to schedule at once
-  const scheduleChunkSize = 1;
+  const scheduleChunkSize = Math.ceil(sequence.steps.length / 8);
 
   const events = new EventEmitter();
 

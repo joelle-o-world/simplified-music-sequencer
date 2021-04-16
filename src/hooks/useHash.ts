@@ -6,10 +6,10 @@ export function useUrlHash(handleChange: (newHash: string) => void) {
   
   useEffect(() => {
     const hashWatcher = setInterval(() => {
-      let hash = window.location.hash.slice(1);
+      let hash = decodeURIComponent(window.location.hash.slice(1));
       if(hash != currentHash) {
-        setCurrentHash(window.location.hash.slice(1));
-        handleChange(window.location.hash.slice(1));
+        setCurrentHash(hash);
+        handleChange(hash);
       }
     }, 200);
 
