@@ -14,6 +14,8 @@ export interface SequencerState {
   title: string;
   composer: string;
   edited?: boolean;
+  originalTitle?: string;
+  originalComposer?: string;
 }
 
 const initialState: SequencerState = {
@@ -29,7 +31,7 @@ const initialState: SequencerState = {
   ],
   tempo: 140,
   stepsPerBeat: 2,
-  title: "Untitled Sequence",
+  title: "New Sequence",
   composer: "",
   edited: false,
 }
@@ -103,6 +105,12 @@ export const publish = (): AppThunk => async (dispatch, getState) => {
 
     dispatch(refreshSequencesIndex());
     dispatch(hideUploadForm())
+    dispatch(setSequence({
+      ...sequencerState,
+      originalComposer: sequencerState.composer,
+      originalTitle: sequencerState.title,
+      edited: false,
+    }))
   } catch(err) {
     dispatch(errorNotification('something went wrong uploading your sequence'))
   }

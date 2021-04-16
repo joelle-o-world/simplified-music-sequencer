@@ -77,6 +77,8 @@ export const openSequence = (id:string, playOnceLoaded=false):AppThunk => async 
     let result = await fetchSequenceData(id)
     dispatch(setSequence({
       ...result,
+      originalComposer: result.composer,
+      originalTitle: result.title,
       composer: getState().sequencer.composer,
       title: `reply to ${result.composer}`,
       edited: false,

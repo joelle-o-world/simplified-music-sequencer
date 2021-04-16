@@ -13,6 +13,7 @@ import {SequencerHistory} from '../../components/SequencerHistory';
 import {ErrorNotifications} from '../errors/ErrorNotifications';
 import {selectSharing} from '../sharing/sharingSlice';
 import LoadingSequence from '../sharing/LoadingSequence';
+import {SequenceHeadings} from '../sharing/SequenceHeadings';
 
 //import './Sequencer.sass'
 
@@ -35,10 +36,13 @@ export const Sequencer: FunctionComponent<SequencerProps> = ({horizontal, vertic
     <ErrorNotifications/>
     <UploadForm/>
     <SequencerInstructions />
-    { currentlyLoadingASequence
-      ? <LoadingSequence/>
-      : <SequencerSteps />
-    }
+    <div className="red-border-box">
+      <SequenceHeadings/>
+      { currentlyLoadingASequence
+        ? <LoadingSequence/>
+        : <SequencerSteps />
+      }
+    </div>
     <SequencerControls />
     <SharedSequencesList />
     <SequencerHistory/>

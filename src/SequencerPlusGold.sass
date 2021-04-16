@@ -119,6 +119,10 @@
   &.UnloopButton
     @include YellowBlock
 
+
+.red-border-box
+  @include RedBorder
+
 body
   @include MainFont
   @include BlackInputs
@@ -199,12 +203,11 @@ body
       .LoadingSequence, .SequencerSteps
         min-height: 300px
       .SequencerSteps
-        @include RedBorder
         padding: 15px
         display: flex
         padding: 50px
         justify-content: center
-        padding-top: 100px
+        padding-top: 50px
         .SequencerStep
           display: flex
           flex-direction: row

@@ -41,6 +41,7 @@ export const ComposerField: FunctionComponent<{autoFocus?: boolean; onEnterPress
   const dispatch = useDispatch();
   const {composer} = useSelector(selectSequencer);
   return <input 
+    placeholder="your name here"
     autoFocus={autoFocus} 
     value={composer} 
     onChange={e => {dispatch(setComposer(e.target.value))}} 
