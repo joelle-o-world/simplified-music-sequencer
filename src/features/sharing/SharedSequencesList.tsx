@@ -7,11 +7,13 @@ import {IoHourglassSharp} from 'react-icons/io5';
 
 function scrollToSequencerSteps() {
   let div = document.getElementById('SequencerSteps');
-  if(div)
-    div.scrollIntoView({
-      block: 'start',
+  if(div) {
+    let top = window.scrollY + div.getBoundingClientRect().top;
+    window.scrollTo({
+      top: top,
       behavior: 'smooth',
     })
+  }
 }
 
 export const SharedSequencesList: FunctionComponent = () => {
@@ -22,7 +24,7 @@ export const SharedSequencesList: FunctionComponent = () => {
     dispatch(refreshSequencesIndex())
   }, [dispatch]);
 
-  return <div className="SharedSequencesListWrapper">
+  return <div className="SharedSequencesListWrapper" id="SharedSequencesList">
       <h2>Open a sequence that someone has shared:</h2>
       <ul className="SharedSequencesList">
         {
@@ -53,8 +55,8 @@ export const OpenSequenceButton: FunctionComponent<{sequenceId: string}> = ({seq
     return <button disabled className="SharedSequenceOpen"><IoHourglassSharp/></button>
   else
     return <button onClick={() => {
+      scrollToSequencerSteps();
       dispatch(openSequence(sequenceId, true))
       //setUrlHash(id);
-      scrollToSequencerSteps();
     }} className="SharedSequenceOpen">open</button>
 }

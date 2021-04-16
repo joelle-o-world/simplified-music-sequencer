@@ -52,6 +52,18 @@ export const ComposerField: FunctionComponent<{autoFocus?: boolean; onEnterPress
   />
 }
 
+
+function scrollToSharedSequencesList() {
+  let div = document.getElementById('SharedSequencesList');
+  if(div) {
+    let top = window.scrollY + div.getBoundingClientRect().top;
+    window.scrollTo({
+      top,
+      behavior: 'smooth'
+    })
+  }
+}
+
 export const UploadButton: FunctionComponent = () => {
   const dispatch = useDispatch();
   const sharing = useSelector(selectSharing);
@@ -60,10 +72,11 @@ export const UploadButton: FunctionComponent = () => {
     className="SequencerUploadButton" 
     disabled={!sequencer.edited}
     onClick={() => {
-      if(sharing.showingUploadForm)
-        dispatch(publish())
-      else
-        dispatch(showUploadForm())
+      dispatch(publish())
+      setTimeout(
+        () => scrollToSharedSequencesList(),
+        300
+      );
     }
   }>
     <IoIosSave/>

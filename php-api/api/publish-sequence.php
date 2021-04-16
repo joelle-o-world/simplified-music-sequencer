@@ -34,5 +34,7 @@
   $sequenceFileHandle = fopen($filepath, "w");
   fwrite($sequenceFileHandle, $sequenceData);
 
+  mail("joelyjoel@protonmail.com", "New Sequence uploaded!", "from: $composer");
+
   echo $filename;
 ?>

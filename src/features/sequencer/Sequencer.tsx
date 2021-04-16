@@ -29,7 +29,6 @@ export const Sequencer: FunctionComponent<SequencerProps> = ({horizontal, vertic
 
   const {currentlyLoadingASequence} = useSelector(selectSharing)
 
-
   const orientation = horizontal ? 'horizontal' : 'vertical'
 
   return <div className={classNames("Sequencer", orientation)}>
@@ -56,7 +55,9 @@ export const SequencerControls: FunctionComponent = () => {
   const sequencer = useSelector(selectSequencer);
   return <div className="SequencerControls">
     <PlaybackButtons/>
-    <UploadButton/>
+    { sequencer.edited 
+      ? <UploadButton/>
+      : null}
     <div className="SequencerTempo">
       <label>Tempo:</label>
       <input type="range" min="50" max="400" value={sequencer.tempo} onChange={e => dispatch(setTempo(Number(e.target.value)))} />
