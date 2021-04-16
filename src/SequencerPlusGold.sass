@@ -1,21 +1,10 @@
+@use "Shared" as *
 @use "PitchBG" as *
 @use "Animations" as *
 
-@font-face
-  font-family: 'game_over'
-  src: url(./ARCADECLASSIC.TTF) format('truetype')
 
 
 
-$bgBlue: rgb(21,47,170)
-$purple: rgb(170,6,170)
-$gray: rgb(170, 170, 170)
-$dullRed: rgb(170, 3, 0)
-$brightRed: rgb(170, 3, 0)
-$yellow: rgba(253, 255, 85)
-$yellowOpaque: rgba(253, 255, 85, .99)
-$teal: rgb(52,170,170)
-$green: rgb(45,162,0)
 
 @mixin RedBorder
   border: 3px solid $dullRed
@@ -102,59 +91,7 @@ $green: rgb(45,162,0)
           right: 20px
           left: 20px
 
-@mixin PurpleHightlight
-  background-color: $purple
-  border-color: $purple
-  color: white
 
-@mixin CrimsonBlock
-  background-color: $brightRed
-  border-color: $brightRed
-  color: $yellow
-
-@mixin YellowBlock
-  background-color: $yellow
-  border-color: $yellow
-  color: $brightRed
-
-@mixin GreenBlock
-  background-color: $green
-  border-color: $green
-  color: $yellow
-
-@mixin MutedBlock
-  //background-color: rgba(255,255,255,.1)
-  //opacity: .9
-
-@mixin TealBlock
-  background-color: $teal
-  color: $bgBlue
-  border: none
-
-@mixin ContentMiddle
-  display: flex
-  justify-content: center
-  align-items: center
-
-@mixin MainFont
-  font-family: game_over, monospace
-  font-weight: regular
-  letter-spacing: 5%
-  word-spacing: 10px
-  //font-weight: bold
-
-@mixin InputOverride
-  @include MainFont
-  color: $gray
-  display: inline-block
-  background-color: transparent
-  border: 1px solid $gray
-  outline: none
-  font-size: inherit
-  svg
-    color: inherit
-    vertical-align: middle
-    margin-right: 5px
 
 @mixin BlackInputs
   input

@@ -1,19 +1,16 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {FunctionComponent} from "react";
 import {useSelector, useDispatch} from 'react-redux';
 import {selectSequencer, setNote, doubleSequence, setTempo} from './sequencerSlice';
-import {PitchParse} from './parsePitch';
 import PitchInput from './PitchInput';
 import classNames from 'classnames'
-import {IoPlaySharp } from 'react-icons/io5'
-import {IoIosSave} from 'react-icons/io';
 import SharedSequencesList from '../sharing/SharedSequencesList'
-import {showUploadForm} from '../sharing/sharingSlice';
 import {UploadForm, UploadButton} from '../sharing/UploadForm';
 import SequencerInstructions from './Instructions';
 import {synthPlay, selectSynth} from '../synth/synthSlice';
-import {PlayButton, PlaybackButtons} from '../synth/PlaybackButtons';
+import {PlaybackButtons} from '../synth/PlaybackButtons';
 import {SequencerHistory} from '../../components/SequencerHistory';
+import {ErrorNotifications} from '../errors/ErrorNotifications';
 
 //import './Sequencer.sass'
 
@@ -29,15 +26,14 @@ export const Sequencer: FunctionComponent<SequencerProps> = ({horizontal, vertic
   const sequencer = useSelector(selectSequencer);
   const dispatch = useDispatch();
 
-  const {nowPlayingStep} = useSelector(selectSynth)
+  
 
-  const handlePlay = () => {
-    dispatch(synthPlay())
-  }
+  const {nowPlayingStep} = useSelector(selectSynth)
 
   const orientation = horizontal ? 'horizontal' : 'vertical'
 
   return <div className={classNames("Sequencer", orientation)}>
+    <ErrorNotifications/>
     <UploadForm/>
     <SequencerInstructions />
     <div className="SequencerSteps" id="SequencerSteps">

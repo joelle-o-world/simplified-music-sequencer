@@ -1,6 +1,8 @@
 import React, {FunctionComponent, useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import {selectSharing, refreshSequencesIndex, openSequence} from './sharingSlice';
+import useUrlHash from '../../hooks/useHash';
+
 
 function scrollToSequencerSteps() {
   let div = document.getElementById('SequencerSteps');
@@ -15,6 +17,10 @@ export const SharedSequencesList: FunctionComponent = () => {
   const sharingState = useSelector(selectSharing);
   const dispatch = useDispatch();
 
+  const {urlHash, setUrlHash} = useUrlHash((newHash: string) => {
+    dispatch(openSequence(newHash));
+  });
+
   useEffect(() => {
     dispatch(refreshSequencesIndex())
   }, [dispatch]);
@@ -27,6 +33,7 @@ export const SharedSequencesList: FunctionComponent = () => {
             ({id, title, composer}) => <li key={id} className="SharedSequence">
               <button onClick={() => {
                 dispatch(openSequence(id))
+                setUrlHash(id);
                 scrollToSequencerSteps();
               }} className="SharedSequenceOpen">open</button>
               <span>
