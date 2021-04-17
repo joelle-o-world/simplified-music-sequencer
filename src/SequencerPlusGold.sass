@@ -336,6 +336,12 @@ body
     .SharedSequencesList
       list-style: none
       .SharedSequence
+        &.usersOwnSequence
+          background-color: green
+        .ShareButton
+          @include ButtonOverride
+          @include TwitchOnHover
+          @include WhiteBlock
         margin: 10px
         font-size: 25px
         padding: 20px

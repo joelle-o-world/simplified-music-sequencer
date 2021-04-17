@@ -3,10 +3,13 @@ import {useSelector, useDispatch} from 'react-redux';
 import {selectSharing, refreshSequencesIndex, openSequence} from './sharingSlice';
 import useUrlHash from '../../hooks/useHash';
 import {IoHourglassSharp} from 'react-icons/io5';
+import {selectSequencer} from '../sequencer/sequencerSlice';
+import classNames from 'classnames'
+import ShareButton from './ShareButton';
 
 
 function scrollToSequencerSteps() {
-  let div = document.getElementById('SequencerSteps');
+  let div = document.getElementById('SequenceHeadings');
   if(div) {
     let top = window.scrollY + div.getBoundingClientRect().top;
     window.scrollTo({
@@ -20,6 +23,8 @@ export const SharedSequencesList: FunctionComponent = () => {
   const sharingState = useSelector(selectSharing);
   const dispatch = useDispatch();
 
+  const sequencer = useSelector(selectSequencer)
+
   useEffect(() => {
     dispatch(refreshSequencesIndex())
   }, [dispatch]);
@@ -29,16 +34,25 @@ export const SharedSequencesList: FunctionComponent = () => {
       <ul className="SharedSequencesList">
         {
           sharingState.publishedSequences.map(
-            ({id, title, composer}) => <li key={id} className="SharedSequence">
-              <OpenSequenceButton sequenceId={id} />
-              <span>
-                <span className="SharedSequenceTitle">{title}</span> 
-                <span className="SharedSequenceCredit">
-                  {" by "} 
-                  <span className="SharedSequenceComposer">{composer}</span>
-                </span>
-              </span>
-            </li>
+              ({id, title, composer}) => {
+                let usersOwnSequence = composer == sequencer.composer && composer != 'anon'
+                return <li 
+                  key={id} 
+                  className={classNames("SharedSequence", {
+                    usersOwnSequence
+                  })}
+                >
+                  <OpenSequenceButton sequenceId={id} />
+                  {usersOwnSequence ? <ShareButton sequenceId={id} /> : null}
+                  <span>
+                    <span className="SharedSequenceTitle">{title}</span> 
+                    <span className="SharedSequenceCredit">
+                      {" by "} 
+                      <span className="SharedSequenceComposer">{composer}</span>
+                    </span>
+                  </span>
+                </li>
+            }
           )
         }
       </ul>
