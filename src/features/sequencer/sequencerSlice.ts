@@ -2,7 +2,7 @@ import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {RootState, AppThunk} from "../../app/store";
 import {PitchParse, parsePitch} from './parsePitch';
 import {publishSequence} from "../../client-api/publishSequence";
-import {refreshSequencesIndex, hideUploadForm} from "../sharing/sharingSlice";
+import {refreshSequencesIndex, hideUploadForm, SequenceID} from "../sharing/sharingSlice";
 import {errorNotification} from "../errors/errorsSlice";
 
 export type SequencerStepState = PitchParse;
@@ -16,6 +16,7 @@ export interface SequencerState {
   edited?: boolean;
   originalTitle?: string;
   originalComposer?: string;
+  originalId?: SequenceID;
 }
 
 const initialState: SequencerState = {
@@ -102,6 +103,7 @@ export const publish = (): AppThunk => async (dispatch, getState) => {
   let sequencerState = getState().sequencer;
   try {
     let result = await publishSequence(sequencerState);
+    let uploadedSequenceID = result
 
     dispatch(refreshSequencesIndex());
     dispatch(hideUploadForm())
@@ -109,6 +111,7 @@ export const publish = (): AppThunk => async (dispatch, getState) => {
       ...sequencerState,
       originalComposer: sequencerState.composer,
       originalTitle: sequencerState.title,
+      originalId: uploadedSequenceID,
       edited: false,
     }))
   } catch(err) {

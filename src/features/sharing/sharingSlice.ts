@@ -5,8 +5,10 @@ import {listSequences, fetchSequenceData} from '../../client-api/publishSequence
 import {synthPlay} from '../synth/synthSlice';
 import {errorNotification} from '../errors/errorsSlice';
 
+export type SequenceID = string;
+
 export interface PublishedSequence {
-  id: string;
+  id: SequenceID;
   title?: string;
   composer?: string;
   data?: SequencerState;
@@ -17,7 +19,9 @@ export interface SharingState {
   isRefreshing: boolean;
   showingUploadForm: boolean;
   currentlyLoadingASequence: boolean;
-  currentlyLoadingSequence: string|null;
+  currentlyLoadingSequence: SequenceID|null;
+  showingShareDialog: boolean;
+  sequenceToShare?: SequenceID;
 }
 
 const initialState: SharingState = {
@@ -26,6 +30,7 @@ const initialState: SharingState = {
   showingUploadForm: false,
   currentlyLoadingASequence: false,
   currentlyLoadingSequence: null,
+  showingShareDialog: false,
 }
 
 export const sharingSlice = createSlice({
@@ -44,23 +49,32 @@ export const sharingSlice = createSlice({
       state.showingUploadForm = false;
     },
 
-    startedLoading: (state, action: PayloadAction<string>) => {
+    startedLoading: (state, action: PayloadAction<SequenceID>) => {
       state.currentlyLoadingASequence = true
       state.currentlyLoadingSequence = action.payload
     },
 
-    finishedLoading: state => {
+    finishedLoading: (state) => {
       state.currentlyLoadingASequence = false;
     },
 
     errorLoading: state => {
       state.currentlyLoadingASequence = false;
     },
+
+    showShareDialog: (state, action: PayloadAction<SequenceID>) => {
+      state.showingShareDialog = true;
+      state.sequenceToShare = action.payload;
+    },
+    
+    hideShareDialog: state => {
+      state.showingShareDialog = false;
+    },
   },
 })
 export default sharingSlice.reducer;
 
-export const {setPublishedSequences, showUploadForm, hideUploadForm, startedLoading, finishedLoading, errorLoading} = sharingSlice.actions;
+export const {setPublishedSequences, showUploadForm, hideUploadForm, startedLoading, finishedLoading, errorLoading, showShareDialog, hideShareDialog } = sharingSlice.actions;
 
 export const refreshSequencesIndex = ():AppThunk => async (dispatch) => {
   try {
@@ -79,6 +93,7 @@ export const openSequence = (id:string, playOnceLoaded=false):AppThunk => async 
       ...result,
       originalComposer: result.composer,
       originalTitle: result.title,
+      originalId: id,
       composer: getState().sequencer.composer,
       title: `reply to ${result.composer}`,
       edited: false,

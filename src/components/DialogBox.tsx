@@ -4,9 +4,17 @@ import './DialogBox.sass';
 
 export const DialogBox: FunctionComponent<{
   className?: string;
-}> = ({children, className}) => {
-  return <div className="DialogBoxWrapper">
-    <div className={classNames("DialogBox", className)}>
+  id?: string;
+  darkBg?: boolean;
+  onBGClick?: () => void;
+}> = ({children, className, id, darkBg=false, onBGClick}) => {
+  return <div 
+    className={classNames("DialogBoxWrapper", {darkBg})} 
+    onClick={e => {
+      if(e.target == e.currentTarget && onBGClick)
+        onBGClick()
+    }}>
+  <div id={id} className={classNames("DialogBox", className)}>
       {children}
     </div>
   </div>

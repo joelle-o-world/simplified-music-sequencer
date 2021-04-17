@@ -21,7 +21,7 @@ function App() {
 
   const dispatch = useDispatch();
   useEffect(() => {
-    let sequenceToLoad = getParameterByName('s');
+    let sequenceToLoad = getParameterByName('sequence');
     if(sequenceToLoad) {
       dispatch(openSequence(sequenceToLoad));
       setPage('main');

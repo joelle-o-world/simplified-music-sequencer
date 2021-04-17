@@ -14,6 +14,7 @@ import {ErrorNotifications} from '../errors/ErrorNotifications';
 import {selectSharing} from '../sharing/sharingSlice';
 import LoadingSequence from '../sharing/LoadingSequence';
 import {SequenceHeadings} from '../sharing/SequenceHeadings';
+import ShareButton, {ShareDialog} from '../sharing/ShareButton';
 
 //import './Sequencer.sass'
 
@@ -33,6 +34,7 @@ export const Sequencer: FunctionComponent<SequencerProps> = ({horizontal, vertic
 
   return <div className={classNames("Sequencer", orientation)}>
     <ErrorNotifications/>
+    <ShareDialog/>
     <UploadForm/>
     <SequencerInstructions />
     <div className="red-border-box">
@@ -55,9 +57,15 @@ export const SequencerControls: FunctionComponent = () => {
   const sequencer = useSelector(selectSequencer);
   return <div className="SequencerControls">
     <PlaybackButtons/>
+
     { sequencer.edited 
       ? <UploadButton/>
       : null}
+
+    { !sequencer.edited && sequencer.originalId && sequencer.steps.some(step => step.hasPitch)
+      ? <ShareButton sequenceId={sequencer.originalId}/>
+      : null }
+
     <div className="SequencerTempo">
       <label>Tempo:</label>
       <input type="range" min="50" max="400" value={sequencer.tempo} onChange={e => dispatch(setTempo(Number(e.target.value)))} />

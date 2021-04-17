@@ -1,3 +1,5 @@
+@use '../shared' as *
+
 .DialogBoxWrapper
   position: fixed
   top: 0px
@@ -9,9 +11,14 @@
   align-items: center
   flex-direction: column
   padding: 50px
+  z-index: 200
+  &.darkBg
+    background-color: rgba(0,0,0, 0.8)
   .DialogBox
     background-color: #333
     box-sizing: border-box
     max-width: 90%
     padding: 20px
     flex-shrink: 1
+    &.yellow
+      @include YellowBlock

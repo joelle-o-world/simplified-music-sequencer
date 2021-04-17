@@ -1,6 +1,8 @@
+@use 'animations' as *
 
 $bgBlue: rgb(21,47,170)
 $purple: rgb(170,6,170)
+$darkerPurple: rgb(140,6,140)
 $gray: rgb(170, 170, 170)
 $dullRed: rgb(170, 3, 0)
 $brightRed: rgb(170, 3, 0)
@@ -18,10 +20,20 @@ $green: rgb(45,162,0)
   border-color: $purple
   color: white
 
+@mixin PurpleBlock
+  background-color: $darkerPurple
+  border-color: $darkerPurple
+  color: white
+
 @mixin CrimsonBlock
   background-color: $brightRed
   border-color: $brightRed
   color: $yellow
+
+@mixin WhiteBlock
+  background-color: white
+  border-color: white
+  color: black
 
 @mixin YellowBlock
   background-color: $yellow
