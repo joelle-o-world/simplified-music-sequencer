@@ -3,7 +3,7 @@ import {RootState, AppThunk} from "../../app/store";
 import {PitchParse, parsePitch} from './parsePitch';
 import {publishSequence} from "../../client-api/publishSequence";
 import {refreshSequencesIndex, hideUploadForm, SequenceID} from "../sharing/sharingSlice";
-import {errorNotification} from "../errors/errorsSlice";
+import {newErrorNotification} from '../notifications/notificationsSlice'
 
 export type SequencerStepState = PitchParse;
 
@@ -115,7 +115,7 @@ export const publish = (): AppThunk => async (dispatch, getState) => {
       edited: false,
     }))
   } catch(err) {
-    dispatch(errorNotification('something went wrong uploading your sequence'))
+    dispatch(newErrorNotification('something went wrong uploading your sequence'))
   }
 
 };

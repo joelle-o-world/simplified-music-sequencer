@@ -7,10 +7,10 @@ import classNames from 'classnames'
 import SharedSequencesList from '../sharing/SharedSequencesList'
 import {UploadForm, UploadButton} from '../sharing/UploadForm';
 import SequencerInstructions from './Instructions';
-import {synthPlay, selectSynth} from '../synth/synthSlice';
+import {selectSynth} from '../synth/synthSlice';
 import {PlaybackButtons} from '../synth/PlaybackButtons';
 import {SequencerHistory} from '../../components/SequencerHistory';
-import {ErrorNotifications} from '../errors/ErrorNotifications';
+import {Notifications} from '../notifications/Notifications';
 import {selectSharing} from '../sharing/sharingSlice';
 import LoadingSequence from '../sharing/LoadingSequence';
 import {SequenceHeadings} from '../sharing/SequenceHeadings';
@@ -26,14 +26,14 @@ interface SequencerProps {
   vertical?: boolean;
 }
 
-export const Sequencer: FunctionComponent<SequencerProps> = ({horizontal, vertical}) => {
+export const Sequencer: FunctionComponent<SequencerProps> = ({horizontal}) => {
 
   const {currentlyLoadingASequence} = useSelector(selectSharing)
 
   const orientation = horizontal ? 'horizontal' : 'vertical'
 
   return <div className={classNames("Sequencer", orientation)}>
-    <ErrorNotifications/>
+    <Notifications/>
     <ShareDialog/>
     <UploadForm/>
     <SequencerInstructions />

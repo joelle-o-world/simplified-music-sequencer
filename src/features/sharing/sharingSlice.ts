@@ -3,7 +3,7 @@ import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {RootState, AppThunk} from '../../app/store';
 import {listSequences, fetchSequenceData} from '../../client-api/publishSequence';
 import {synthPlay} from '../synth/synthSlice';
-import {errorNotification} from '../errors/errorsSlice';
+import {newErrorNotification} from '../notifications/notificationsSlice';
 
 export type SequenceID = string;
 
@@ -81,7 +81,7 @@ export const refreshSequencesIndex = ():AppThunk => async (dispatch) => {
     let result = await listSequences();
     dispatch(setPublishedSequences(result.reverse()));
   } catch(err) {
-    dispatch(errorNotification("There was a problem loading the shared sequences"))
+    dispatch(newErrorNotification("There was a problem loading the shared sequences"))
   }
 }
 
@@ -107,7 +107,7 @@ export const openSequence = (id:string, playOnceLoaded=false):AppThunk => async 
 
   } catch(err) {
     console.error(err);
-    dispatch(errorNotification("There was a problem opening the sequence: "+id))
+    dispatch(newErrorNotification("There was a problem opening the sequence: "+id))
     dispatch(errorLoading());
   }
 }

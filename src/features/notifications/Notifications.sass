@@ -1,7 +1,7 @@
 @use '../../shared' as *
 @use '../../Animations' as *
 
-.ErrorNotifications
+.Notifications
   position: fixed
   left: 0px
   right: 0px
@@ -12,9 +12,13 @@
   z-index: 100
   pointer-events: none
 
-  .ErrorNotification
-    @include YellowBlock
-    @include Jiggle
+  .Notification
+    &:not(.isError)
+      @include YellowBlock
+      @include SlideDown
+    &.isError
+      @include CrimsonBlock
+      @include Jiggle
     font-size: 50px
     max-width: 600px
     margin: 25px
@@ -28,7 +32,7 @@
       vertical-align: middle
       margin-right: 10px
 
-    button.DismissError
+    button.DismissNotification
       @include ButtonOverride
       @include CrimsonBlock
       border: none

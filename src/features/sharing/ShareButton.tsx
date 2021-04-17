@@ -5,6 +5,7 @@ import {showShareDialog, SequenceID, selectSharing, hideShareDialog} from './sha
 import {useDispatch, useSelector} from 'react-redux';
 
 import './ShareDialog.sass'
+import {newNotification} from '../notifications/notificationsSlice';
 
 export const ShareButton: FunctionComponent<{sequenceId:SequenceID}> = ({sequenceId}) => {
   const dispatch = useDispatch();
@@ -38,11 +39,13 @@ export const ShareDialog: FunctionComponent = () => {
 export const CopyInput: FunctionComponent<{toCopy: string}> = ({
   toCopy,
 }) => {
+  const dispatch = useDispatch();
   const handleClick = (e:React.MouseEvent<HTMLInputElement>) => {
     // @ts-ignore
     e.target.select();
     try {
       document.execCommand('copy');
+      dispatch(newNotification("copied link"));
     } catch(err) {
       console.error(err)
     }
