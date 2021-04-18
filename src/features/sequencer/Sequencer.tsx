@@ -1,7 +1,7 @@
 import React from 'react';
 import {FunctionComponent} from "react";
 import {useSelector, useDispatch} from 'react-redux';
-import {selectSequencer, setNote, doubleSequence, setTempo} from './sequencerSlice';
+import {selectSequencer, setNote, doubleSequence} from './sequencerSlice';
 import PitchInput from './PitchInput';
 import classNames from 'classnames'
 import SharedSequencesList from '../sharing/SharedSequencesList'
@@ -15,6 +15,7 @@ import {selectSharing} from '../sharing/sharingSlice';
 import LoadingSequence from '../sharing/LoadingSequence';
 import {SequenceHeadings} from '../sharing/SequenceHeadings';
 import ShareButton, {ShareDialog} from '../sharing/ShareButton';
+import {TempoInput} from './TempoInput';
 
 //import './Sequencer.sass'
 
@@ -53,7 +54,6 @@ export const Sequencer: FunctionComponent<SequencerProps> = ({horizontal}) => {
 export default Sequencer;
 
 export const SequencerControls: FunctionComponent = () => {
-  const dispatch = useDispatch();
   const sequencer = useSelector(selectSequencer);
   return <div className="SequencerControls">
     <PlaybackButtons/>
@@ -66,11 +66,7 @@ export const SequencerControls: FunctionComponent = () => {
       ? <ShareButton sequenceId={sequencer.originalId}/>
       : null }
 
-    <div className="SequencerTempo">
-      <label>Tempo:</label>
-      <input type="range" min="50" max="400" value={sequencer.tempo} onChange={e => dispatch(setTempo(Number(e.target.value)))} />
-      <span>{sequencer.tempo}bpm</span>
-    </div>
+      <TempoInput/>
   </div>
 }
 

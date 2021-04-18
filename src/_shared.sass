@@ -1,5 +1,3 @@
-@use 'animations' as *
-
 $bgBlue: rgb(21,47,170)
 $purple: rgb(170,6,170)
 $darkerPurple: rgb(140,6,140)
@@ -84,13 +82,23 @@ $green: rgb(45,162,0)
     margin-right: 5px
 
 @mixin BlackInputs
-  input
+  input:not([type=range])
     @include InputOverride
     background-color: black
     border: none
     padding: 10px
     color: white
     max-width: 90%
+
+@mixin MinimalTextInput
+  display: inline
+  width: auto
+  background: none
+  background-color: transparent
+  border: 1px solid transparent
+  padding: 3px
+  color: $gray
+  
 
 @mixin ButtonOverride
   @include InputOverride

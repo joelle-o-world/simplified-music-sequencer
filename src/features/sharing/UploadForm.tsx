@@ -34,7 +34,7 @@ export const UploadForm: FunctionComponent = () => {
 export const TitleField: FunctionComponent = () => {
   const dispatch = useDispatch();
   const {title} = useSelector(selectSequencer);
-  return <input onFocus={e => e.target.select()} value={title} onChange={e => {dispatch(setTitle(e.target.value))}}/>
+  return <input type="text" onFocus={e => e.target.select()} value={title} onChange={e => {dispatch(setTitle(e.target.value))}}/>
 };
 
 export const ComposerField: FunctionComponent<{autoFocus?: boolean; onEnterPress?: () => void}> = ({autoFocus, onEnterPress}) => {
@@ -43,6 +43,7 @@ export const ComposerField: FunctionComponent<{autoFocus?: boolean; onEnterPress
   return <input 
     placeholder="your name here"
     autoFocus={autoFocus} 
+    type="text"
     value={composer} 
     onChange={e => {dispatch(setComposer(e.target.value))}} 
     onKeyPress={e => {

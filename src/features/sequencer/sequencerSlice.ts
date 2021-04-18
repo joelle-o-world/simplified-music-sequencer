@@ -72,8 +72,14 @@ export const sequencerSlice = createSlice({
         state.steps.push(parsePitch(''));
     },
 
-    setTempo: (state, action: PayloadAction<number>) => {
-      state.tempo = action.payload;
+    setTempo: (state, {payload}: PayloadAction<number|string>) => {
+      if(typeof payload === 'number')
+        state.tempo = payload;
+      else if(typeof payload == 'string') {
+        let parsed = parseFloat(payload);
+        if(parsed > 0 && !isNaN(parsed))
+          state.tempo = parsed
+      }
     },
 
     setTitle: (state, action: PayloadAction<string>) => {

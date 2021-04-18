@@ -31,7 +31,7 @@ export const ShareDialog: FunctionComponent = () => {
 
   return <DialogBox id="ShareDialog" darkBg onBGClick={() => dispatch(hideShareDialog())}>
     <button className="CloseButton" onClick={() => dispatch(hideShareDialog())}><IoCloseSharp/></button>
-    <h2><IoPaperPlaneSharp/>Send someone this link so they can listen to your sequence</h2>
+    <h2><IoPaperPlaneSharp/>Send someone this link so they can listen to the sequence</h2>
     <CopyInput toCopy={url} />
   </DialogBox>
 }
