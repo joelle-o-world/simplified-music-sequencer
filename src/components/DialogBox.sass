@@ -7,10 +7,10 @@
   right: 0px
   bottom: 0px
   display: flex
-  justify-content: center
+  justify-content: space-around
   align-items: center
   flex-direction: column
-  padding: 50px
+  //padding: 50px
   z-index: 99
   &.darkBg
     background-color: rgba(0,0,0, 0.8)
@@ -20,5 +20,7 @@
     max-width: 90%
     padding: 20px
     flex-shrink: 1
+    @media screen and (max-width: 767px)
+      text-align: center
     &.yellow
       @include YellowBlock

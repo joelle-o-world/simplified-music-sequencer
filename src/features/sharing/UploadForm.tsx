@@ -37,11 +37,15 @@ export const TitleField: FunctionComponent = () => {
   return <input type="text" onFocus={e => e.target.select()} value={title} onChange={e => {dispatch(setTitle(e.target.value))}}/>
 };
 
-export const ComposerField: FunctionComponent<{autoFocus?: boolean; onEnterPress?: () => void}> = ({autoFocus, onEnterPress}) => {
+export const ComposerField: FunctionComponent<{
+  autoFocus?: boolean; 
+  onEnterPress?: () => void;
+  noPlaceholder?: boolean;
+}> = ({autoFocus, onEnterPress, noPlaceholder=false}) => {
   const dispatch = useDispatch();
   const {composer} = useSelector(selectSequencer);
   return <input 
-    placeholder="your name here"
+    placeholder={noPlaceholder ? undefined : "your name here"}
     autoFocus={autoFocus} 
     type="text"
     value={composer} 

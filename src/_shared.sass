@@ -76,19 +76,24 @@ $green: rgb(45,162,0)
   border: 1px solid $gray
   outline: none
   font-size: inherit
+  max-width: 100%
   svg
     color: inherit
     vertical-align: middle
     margin-right: 5px
 
 @mixin BlackInputs
-  input:not([type=range])
+  input
     @include InputOverride
     background-color: black
     border: none
-    padding: 10px
+    &:not([type=range])
+      padding: 10px
     color: white
     max-width: 90%
+    &::placeholder
+      font-size: 70%
+      text-align: center
 
 @mixin MinimalTextInput
   display: inline
@@ -125,3 +130,91 @@ $green: rgb(45,162,0)
     animation: Boing .5s
     transform-origin: bottom center
     opacity: 1
+
+@mixin RedBorder
+  border: 3px solid $dullRed
+  padding: 3px
+  margin-top: 3px
+  margin-bottom: 3px
+
+
+@mixin TextSection
+  @include RedBorder
+  @include MutedBlock
+  padding: 20px
+  font-size: 35px
+  section
+    clear: both
+  p
+    strong
+      font-size: 200%
+    strong.butNotHuge
+      font-size: 150%
+  hgroup
+    h1
+      @include CrimsonBlock
+      text-align: center
+      font-size: 50px
+      margin: 0px
+      padding: 4px
+    h2
+      @include TealBlock
+      text-align: center
+      font-size: 35px
+      padding: 4px
+      margin: 0px
+      text-decoration: none
+  h1
+    text-align: center
+  ol
+    margin-left: 30px
+  .side-by-side
+    display: flex
+    flex-direction: row
+    //flex-wrap: wrap
+    align-items: center
+    justify-content: space-between
+    img
+      flex-basis: 50%
+  img
+    max-width: 100%
+  @media screen and (min-width: 1200px)
+    .float-right
+      float: right
+    .float-left
+      float: left
+  @media screen and (max-width: 1199px)
+    .float-right, .float-left
+      display: block
+      margin-right: auto
+      margin-left: auto
+      max-width: 600px
+  figure.small-center
+    display: flex
+    align-items: center
+    justify-content: center
+    flex-wrap: wrap
+    figcaption
+      max-width: 400px
+    img
+      max-width: 400px
+      margin: 10px
+      height: auto
+
+    
+  figure
+    position: relative
+    max-width: 600px
+    iframe
+      max-width: 100%
+    >figcaption
+      background-color: white
+      color: black
+      padding: 10px
+      &.insetOnFigure
+        @media screen and (min-width: 768px)
+          position: absolute
+          bottom: 20px
+          right: 20px
+          left: 20px
+

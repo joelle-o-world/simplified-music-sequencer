@@ -28,11 +28,16 @@ function App() {
     }
   }, []);
 
+  const heading = <hgroup className="MainPageHeader">
+    <h1>Musical Sequencing</h1>
+    <h2>Programming a tune using the computer</h2>
+  </hgroup>
+
   if(page === 'chooseName')
     return <div className="App">
       <DialogBox className="ChooseName">
         <p>Hello, what is your name?</p>
-        <ComposerField autoFocus onEnterPress={() => setPage('main')} />
+        <ComposerField autoFocus onEnterPress={() => setPage('main')} noPlaceholder />
         <button className="RedButton" onClick={() => setPage('main')}>Begin</button>
       </DialogBox>
     </div>
@@ -40,7 +45,7 @@ function App() {
     return (
       <div className="App">
         <Sequencer horizontal /> 
-        <footer>
+        <footer className="AppFooter">
           made by <a href="http://joel.forsale">joel</a> -- <a href="https://github.com/joelyjoel/simplified-music-sequencer">view source code</a>
         </footer>
       </div>
