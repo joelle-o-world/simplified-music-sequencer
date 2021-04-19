@@ -13,6 +13,7 @@ export const TempoInput: FunctionComponent = () => {
         onChange={e => dispatch(setTempo(e.target.value))}
         onFocus={e => e.target.select()}
         className="SequencerTempoInput"
+        type="number"
       />
       {"bpm"}
     </span>
