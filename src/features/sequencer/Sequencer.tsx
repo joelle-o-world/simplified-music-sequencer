@@ -2,7 +2,7 @@ import React from 'react';
 import {FunctionComponent} from "react";
 import {useSelector, useDispatch} from 'react-redux';
 import {selectSequencer, setNote, doubleSequence} from './sequencerSlice';
-import PitchInput from './PitchInput';
+import SequencerStepInput from './SequencerStepInput';
 import classNames from 'classnames'
 import SharedSequencesList from '../sharing/SharedSequencesList'
 import {UploadForm, UploadButton} from '../sharing/UploadForm';
@@ -78,10 +78,10 @@ export const SequencerSteps: FunctionComponent = () => {
       {sequencer.steps.map((step, i) => ( 
         <div className={classNames("SequencerStep", {nowPlaying: nowPlayingStep === i, barline: i%8 === 0})} key={i}>
           <span className="SequencerStepTime">{printTime(i)}</span>
-          <PitchInput 
+          <SequencerStepInput 
             value={step.str} 
             onChange={val => dispatch(setNote({stepIndex: i, newNote: val}))} 
-            className="SequencerStepInput"
+            //className="SequencerStepInput"
             id={"SequencerStepPitch-"+i}
             onKeyDown={(e) => {
               if(e.key === "ArrowDown" || e.key === "j") {

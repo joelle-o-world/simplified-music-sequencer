@@ -189,7 +189,7 @@ body
           padding: 5px
           &.nowPlaying
             @include PurpleHightlight
-            .PitchInputWrapper
+            .PitchInputWrapper, .SequencerStepInputWrapper
               @include PurpleHightlight
               input.hasPitch
                 //transform: scale(1.25)
@@ -203,9 +203,9 @@ body
           &:focus-within .SequencerStepTime
             background-color: $purple
             color: white
-          .PitchInputWrapper
+          //.PitchInputWrapper, .SequencerStepInputWrapper
             //z-index: 10
-          .PitchInput
+          .PitchInput, .SequencerStepInput
             @include InputOverride
             @include PitchBG(true)
             @include TwitchOnHover

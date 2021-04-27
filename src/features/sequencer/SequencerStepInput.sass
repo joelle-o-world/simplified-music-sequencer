@@ -1,0 +1,18 @@
+@use '../../Animations' as *
+
+
+.SequencerStepInputWrapper
+  //position: relative
+  .SequencerStepInput
+  .keyboardwrapper
+    position: absolute
+    box-sizing: border-box
+    max-width: 100vw
+    overflow: auto
+    .PianoKeyboard
+      z-index: 100
+      position: relative
+      transform-origin: top left 
+      right: calc(min(auto, 0px))
+      animation: Boing .25s
+      
