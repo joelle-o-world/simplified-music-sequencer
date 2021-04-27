@@ -84,12 +84,12 @@ export const SequencerSteps: FunctionComponent = () => {
             //className="SequencerStepInput"
             id={"SequencerStepPitch-"+i}
             onKeyDown={(e) => {
-              if(e.key === "ArrowDown" || e.key === "j") {
+              if(e.key === "ArrowDown") {
                 e.preventDefault();
                 let el = document.getElementById("SequencerStepPitch-" + (i+1)%sequencer.steps.length);
                 if(el)
                   el.focus();
-              } else if(e.key === "ArrowUp" || e.key === "k") {
+              } else if(e.key === "ArrowUp") {
                 e.preventDefault()
                 let el = document.getElementById("SequencerStepPitch-" + (i-1+sequencer.steps.length)%sequencer.steps.length);
                 if(el)

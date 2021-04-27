@@ -4,11 +4,12 @@ import {PitchParse, parsePitch} from './parsePitch';
 import {publishSequence} from "../../client-api/publishSequence";
 import {refreshSequencesIndex, hideUploadForm, SequenceID} from "../sharing/sharingSlice";
 import {newErrorNotification, newNotification} from '../notifications/notificationsSlice'
+import {StepParse} from "./SequencerStepInput";
 
 export type SequencerStepState = PitchParse;
 
 export interface SequencerState {
-  steps: PitchParse[];
+  steps: StepParse[];
   tempo: number;
   stepsPerBeat?: number;
   title: string;

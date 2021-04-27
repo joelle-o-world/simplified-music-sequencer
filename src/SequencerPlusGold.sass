@@ -191,7 +191,7 @@ body
             @include PurpleHightlight
             .PitchInputWrapper, .SequencerStepInputWrapper
               @include PurpleHightlight
-              input.hasPitch
+              input.hasPitch, input.hasDrums
                 //transform: scale(1.25)
                 @include Twitch
               //z-index: 45
@@ -220,6 +220,10 @@ body
             font-weight: 1000
             .PianoKeyboard
               background-color: #333
+            &.hasDrums
+              font-size: 80%
+              background-color: #ccc
+              color: black
             //&.hasPitch
               //border-color: 2px solid white
 

@@ -10,17 +10,43 @@ import PianoKeyboard from './PianoKeyboard';
 
 import './SequencerStepInput.sass'
 
-import {playPitch} from '../synth/synth';
+import {playPitch, playDrums} from '../synth/synth';
 import {useSelector} from 'react-redux';
 import {selectSynth} from '../synth/synthSlice';
 import {useElementPosition} from '../../hooks/useElementPosition';
 
 import {cssPitchClassNames} from './PitchInput'
+import {parseDrum} from '../synth/drums';
+
+// NOTE: All properties added in future versions should be optional for backwards compatibility.
+export interface StepParse {
+  str: string;
+  hasPitch?: boolean;
+  midiNumber?: number;
+  hasError?: boolean;
+  errorMessage?: string;
+  hasDrums?: boolean;
+  drums?: string[];
+}
+
+export function parseStep(str: string):StepParse {
+  const drumParse = parseDrum(str)
+  if(drumParse.hasDrums)
+    return {
+      ...drumParse,
+      hasPitch: false
+    };
+  const pitchParse = parsePitch(str);
+  return {
+    ...pitchParse,
+    hasDrums: false,
+  }
+}
 
 export interface PitchInputProps {
   className?: string;
   value: string;
-  onChange: (e: PitchParse) => void;
+  onChange: (e: StepParse) => void;
   id?: string;
   onKeyPress?: (e:React.KeyboardEvent) => void;
   onKeyDown?: (e:React.KeyboardEvent) => void;
@@ -44,14 +70,14 @@ export const SequencerStepInput: FunctionComponent<PitchInputProps> = ({
   const [internalValue, setInternalValue] = useState('');
   let displayValue = value !== undefined ? value : internalValue
 
-  const internalParse = parsePitch(displayValue);
+  const internalParse = parseStep(displayValue);
   const pitchClass = internalParse.midiNumber ? internalParse.midiNumber%12 : null;
   const cssPitchClass = pitchClass !== null 
     ? cssPitchClassNames[pitchClass]
     : false
 
   const handleChange = (str:string) => {
-    let parse = parsePitch(str);
+    let parse = parseStep(str);
     if(onChange)
       onChange(parse);
 
@@ -74,6 +100,7 @@ export const SequencerStepInput: FunctionComponent<PitchInputProps> = ({
       className={classNames(className, "SequencerStepInput", {
         hasPitch: internalParse.hasPitch,
         hasError: internalParse.hasError,
+        hasDrums: internalParse.hasDrums,
       }, cssPitchClass)}
       onChange={ e => handleChange(e.target.value) }
       onFocus={e => {
@@ -86,6 +113,9 @@ export const SequencerStepInput: FunctionComponent<PitchInputProps> = ({
       onMouseOver={() => {
         if(internalParse.midiNumber !== undefined && !playing)
           playPitch(internalParse.midiNumber);
+        else if(internalParse.hasDrums && !playing) {
+          playDrums(internalParse.drums);
+        }
       }}
       readOnly={isMobile || isTablet}
       placeholder="~"

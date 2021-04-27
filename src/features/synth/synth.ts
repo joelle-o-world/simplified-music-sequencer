@@ -1,37 +1,66 @@
 import EventEmitter from "events";
-import {PitchParse} from "../sequencer/parsePitch";
+import {StepParse} from '../sequencer/SequencerStepInput';
 import {SequencerState} from "../sequencer/sequencerSlice";
+import drumBuffers, {loadDrumBuffers} from "./drums";
 
 // @ts-ignore
 const AudioContext = window.AudioContext || window.webkitAudioContext;
+loadDrumBuffers(new AudioContext());
 
 export class Synth extends EventEmitter {
   
   ctx: AudioContext;
   gain: GainNode;
+  oscVolume: GainNode;
   osc: OscillatorNode;
 
   constructor() {
     super();
     this.ctx = new AudioContext();
     this.gain = this.ctx.createGain();
+    this.oscVolume = this.ctx.createGain();
+    this.oscVolume.gain.value = 0.7;
     this.osc = this.ctx.createOscillator();
     this.osc.connect(this.gain);
     this.osc.type = "square"
-    this.gain.connect(this.ctx.destination);
+    this.gain.connect(this.oscVolume);
     this.gain.gain.value = 0;
+    this.oscVolume.connect(this.ctx.destination);
     this.osc.start();
   }
 
   playFrequency(f:number, t:number) {
     this.osc.frequency.setValueAtTime(f, t);
     this.gain.gain.setValueAtTime(1, t);
-    this.gain.gain.setTargetAtTime(0, t+.001, 0.2)
+    this.gain.gain.setTargetAtTime(0, t+.001, 0.1)
   }
 
   playNote(midiNumber: number, t: number) {
     let f = 440 * Math.pow(2, (midiNumber-65)/12);
     this.playFrequency(f, t)
+  }
+
+  playDrum(name: string, t: number) {
+    try {
+      let buffer = drumBuffers[name];
+      if(!buffer)
+        throw `Drum sample does not exist: ${name}`;
+      if(buffer === 'pending')
+        throw `Attempt to schedule drums before loading them`;
+      if(buffer == 'loading')
+        throw `Drum sample didn't load in time: "${name}"`;
+
+      if(buffer) {
+        console.log('playing', name);
+        let source = this.ctx.createBufferSource();
+        source.buffer = buffer;
+        source.connect(this.ctx.destination);
+        source.start(t);
+      } else
+        throw `Problem with drum sample: ${name}`;
+    } catch(err) {
+      console.error(err);
+    }
   }
 
   stop(t: number) {
@@ -43,7 +72,7 @@ export class Synth extends EventEmitter {
     this.osc.stop(t + 2);
   }
 
-  playSequence(sequence: PitchParse[], tempo=140, startTime=this.ctx.currentTime) {
+  playSequence(sequence: StepParse[], tempo=140, startTime=this.ctx.currentTime) {
     let tOffset = startTime - this.ctx.currentTime;
     let stepInterval = 60/tempo
     for(let i=0; i < sequence.length; ++i) {
@@ -74,6 +103,14 @@ const getPersistantSynth = () => {
 export function playPitch(midiNumber: number) {
   let synth = getPersistantSynth();
   synth.playNote(midiNumber, synth.ctx.currentTime);
+}
+
+export function playDrums(drums?: string[]) {
+  if(drums) {
+    let synth = getPersistantSynth();
+    for(let drum of drums)
+      synth.playDrum(drum, synth.ctx.currentTime);
+  }
 }
 
 export function playSequence(
@@ -128,9 +165,12 @@ export function playSequence(
       }
 
       let step = sequence.steps[nextStep];
-      let midiNumber = step.midiNumber;
+      let {midiNumber, hasDrums, drums} = step;
       if(midiNumber !== undefined)
         synth.playNote(midiNumber, nextStepTime);
+      if(hasDrums && drums)
+        for(let drum of drums)
+          synth.playDrum(drum, nextStepTime);
       const stepNumber = nextStep;
       at(nextStepTime, () => events.emit('step', stepNumber))
 
