@@ -3,6 +3,7 @@
 $w: 50px
 $b: 30px
 $h: 200px
+$white-key-spacing: 1px
 
 @mixin HighlightedKey
   @include PitchBG
@@ -20,8 +21,7 @@ $h: 200px
     -moz-user-select: none
     -khtml-user-select: none
     -webkit-user-select: none
-    -o-user-select: none
-    margin: 1px
+    io-user-select: none
     display: flex
 
     align-items: center
@@ -34,12 +34,15 @@ $h: 200px
 
   .white-keys
     display: flex
-    z-index: 19
+    z-index: 119
+    color: #999
     .key
       flex-shrink: 0
-      width: $w
+      width: $w - $white-key-spacing 
+      box-sizing: border-box
       background-color: white
       height: $h
+      margin-right: $white-key-spacing
       border-bottom: 30px solid #eee
       transition: border-bottom .1s, background-color .1s
       &.highlighted
@@ -52,8 +55,11 @@ $h: 200px
   .black-keys
     display: flex
     position: absolute
-    z-index: 20
+    z-index: 120
+    pointer-events: none
     .key
+      pointer-events: auto
+      box-sizing: border-box
       width: $b 
       font-size: 12px
       height: $h / 2

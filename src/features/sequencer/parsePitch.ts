@@ -13,7 +13,7 @@ export function parsePitch(inputStr:string): PitchParse {
     // Trim whitespace
     let str = inputStr.trim();
 
-    if(str.length == 0)
+    if(str.length === 0)
       return {
         hasPitch: false,
         str,
@@ -36,9 +36,9 @@ export function parsePitch(inputStr:string): PitchParse {
       let letter = letterResult[0].toUpperCase();
       let pitchClass = letterValues[letter];
       let midiNumber = pitchClass + octave * 12
-      if(accidentalResult == '#')
+      if(accidentalResult === '#')
         midiNumber++;
-      else if(accidentalResult == 'b')
+      else if(accidentalResult === 'b')
         midiNumber--;
       else if(accidentalResult)
         throw `"${inputStr}" is not a musical note`

@@ -2,14 +2,21 @@ import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {RootState, AppThunk} from "../../app/store";
 import {PitchParse, parsePitch} from './parsePitch';
 import {publishSequence} from "../../client-api/publishSequence";
-import {refreshSequencesIndex, hideUploadForm} from "../sharing/sharingSlice";
+import {refreshSequencesIndex, hideUploadForm, SequenceID} from "../sharing/sharingSlice";
+import {newErrorNotification, newNotification} from '../notifications/notificationsSlice'
 
+export type SequencerStepState = PitchParse;
 
 export interface SequencerState {
   steps: PitchParse[];
   tempo: number;
+  stepsPerBeat?: number;
   title: string;
   composer: string;
+  edited?: boolean;
+  originalTitle?: string;
+  originalComposer?: string;
+  originalId?: SequenceID;
 }
 
 const initialState: SequencerState = {
@@ -24,8 +31,10 @@ const initialState: SequencerState = {
     parsePitch(''),
   ],
   tempo: 140,
-  title: "",
+  stepsPerBeat: 2,
+  title: "New Sequence",
   composer: "",
+  edited: false,
 }
 
 export const sequencerSlice = createSlice({
@@ -45,6 +54,8 @@ export const sequencerSlice = createSlice({
         state.steps[action.payload.stepIndex] = parsePitch(newNote);
       else
         state.steps[action.payload.stepIndex] = newNote
+
+      state.edited = true;
     },
 
     clearNote: (state, action: PayloadAction<number>) => {
@@ -53,6 +64,7 @@ export const sequencerSlice = createSlice({
       }
 
       state.steps[action.payload] = parsePitch('');
+      state.edited = true;
     },
 
     addSteps: (state, action: PayloadAction<number>) => {
@@ -60,8 +72,14 @@ export const sequencerSlice = createSlice({
         state.steps.push(parsePitch(''));
     },
 
-    setTempo: (state, action: PayloadAction<number>) => {
-      state.tempo = action.payload;
+    setTempo: (state, {payload}: PayloadAction<number|string>) => {
+      if(typeof payload === 'number')
+        state.tempo = payload;
+      else if(typeof payload == 'string') {
+        let parsed = parseFloat(payload);
+        if(parsed > 0 && !isNaN(parsed))
+          state.tempo = parsed
+      }
     },
 
     setTitle: (state, action: PayloadAction<string>) => {
@@ -91,12 +109,20 @@ export const publish = (): AppThunk => async (dispatch, getState) => {
   let sequencerState = getState().sequencer;
   try {
     let result = await publishSequence(sequencerState);
+    let uploadedSequenceID = result
 
     dispatch(refreshSequencesIndex());
     dispatch(hideUploadForm())
-    console.log('done');
+    dispatch(setSequence({
+      ...sequencerState,
+      originalComposer: sequencerState.composer,
+      originalTitle: sequencerState.title,
+      originalId: uploadedSequenceID,
+      edited: false,
+    }))
+    dispatch(newNotification("Your sequence has been uploaded!"))
   } catch(err) {
-    throw err;
+    dispatch(newErrorNotification('something went wrong uploading your sequence'))
   }
 
 };

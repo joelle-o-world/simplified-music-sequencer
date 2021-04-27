@@ -1,0 +1,220 @@
+$bgBlue: rgb(21,47,170)
+$purple: rgb(170,6,170)
+$darkerPurple: rgb(140,6,140)
+$gray: rgb(170, 170, 170)
+$dullRed: rgb(170, 3, 0)
+$brightRed: rgb(170, 3, 0)
+$yellow: rgba(253, 255, 85)
+$yellowOpaque: rgba(253, 255, 85, .99)
+$teal: rgb(52,170,170)
+$green: rgb(45,162,0)
+
+@font-face
+  font-family: 'game_over'
+  src: url(./ARCADECLASSIC.TTF) format('truetype')
+
+@mixin PurpleHightlight
+  background-color: $purple
+  border-color: $purple
+  color: white
+
+@mixin PurpleBlock
+  background-color: $darkerPurple
+  border-color: $darkerPurple
+  color: white
+
+@mixin CrimsonBlock
+  background-color: $brightRed
+  border-color: $brightRed
+  color: $yellow
+
+@mixin WhiteBlock
+  background-color: white
+  border-color: white
+  color: black
+
+@mixin YellowBlock
+  background-color: $yellow
+  border-color: $yellow
+  color: $brightRed
+
+@mixin GreenBlock
+  background-color: $green
+  border-color: $green
+  color: $yellow
+
+@mixin DietBlock
+  background-color: transparent
+  border: 1px solid $gray
+
+@mixin MutedBlock
+  //background-color: rgba(255,255,255,.1)
+  //opacity: .9
+
+@mixin TealBlock
+  background-color: $teal
+  color: $bgBlue
+  border: none
+
+@mixin ContentMiddle
+  display: flex
+  justify-content: center
+  align-items: center
+
+@mixin MainFont
+  font-family: game_over, monospace
+  font-weight: regular
+  letter-spacing: 5%
+  word-spacing: 10px
+  //font-weight: bold
+
+@mixin InputOverride
+  @include MainFont
+  color: $gray
+  display: inline-block
+  background-color: transparent
+  border: 1px solid $gray
+  outline: none
+  font-size: inherit
+  max-width: 100%
+  svg
+    color: inherit
+    vertical-align: middle
+    margin-right: 5px
+
+@mixin BlackInputs
+  input
+    @include InputOverride
+    background-color: black
+    border: none
+    &:not([type=range])
+      padding: 10px
+    color: white
+    max-width: 90%
+    &::placeholder
+      font-size: 70%
+      text-align: center
+
+@mixin MinimalTextInput
+  display: inline
+  width: auto
+  background: none
+  background-color: transparent
+  border: 1px solid transparent
+  padding: 3px
+  color: $gray
+  
+
+@mixin ButtonOverride
+  @include InputOverride
+  cursor: pointer
+  margin: 5px
+  &:hover:not(:disabled)
+    @include PurpleHightlight
+  &:disabled
+    &:hover
+      opacity: 1
+    opacity: .7
+    cursor: not-allowed
+
+  position: relative
+  .hover-info
+    @include YellowBlock
+    position: absolute
+    bottom: 100%
+    left: -20px
+    right: -20px
+    display: none
+  &:hover .hover-info
+    display: block
+    animation: Boing .5s
+    transform-origin: bottom center
+    opacity: 1
+
+@mixin RedBorder
+  border: 3px solid $dullRed
+  padding: 3px
+  margin-top: 3px
+  margin-bottom: 3px
+
+
+@mixin TextSection
+  @include RedBorder
+  @include MutedBlock
+  padding: 20px
+  font-size: 35px
+  section
+    clear: both
+  p
+    strong
+      font-size: 200%
+    strong.butNotHuge
+      font-size: 150%
+  hgroup
+    h1
+      @include CrimsonBlock
+      text-align: center
+      font-size: 50px
+      margin: 0px
+      padding: 4px
+    h2
+      @include TealBlock
+      text-align: center
+      font-size: 35px
+      padding: 4px
+      margin: 0px
+      text-decoration: none
+  h1
+    text-align: center
+  ol
+    margin-left: 30px
+  .side-by-side
+    display: flex
+    flex-direction: row
+    //flex-wrap: wrap
+    align-items: center
+    justify-content: space-between
+    img
+      flex-basis: 50%
+  img
+    max-width: 100%
+  @media screen and (min-width: 1200px)
+    .float-right
+      float: right
+    .float-left
+      float: left
+  @media screen and (max-width: 1199px)
+    .float-right, .float-left
+      display: block
+      margin-right: auto
+      margin-left: auto
+      max-width: 600px
+  figure.small-center
+    display: flex
+    align-items: center
+    justify-content: center
+    flex-wrap: wrap
+    figcaption
+      max-width: 400px
+    img
+      max-width: 400px
+      margin: 10px
+      height: auto
+
+    
+  figure
+    position: relative
+    max-width: 600px
+    iframe
+      max-width: 100%
+    >figcaption
+      background-color: white
+      color: black
+      padding: 10px
+      &.insetOnFigure
+        @media screen and (min-width: 768px)
+          position: absolute
+          bottom: 20px
+          right: 20px
+          left: 20px
+

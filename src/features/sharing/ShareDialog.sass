@@ -1,0 +1,20 @@
+@use '../../shared' as *
+@use '../../Animations' as *
+
+
+#ShareDialog
+  @include PurpleBlock
+  @include Twitch
+  button.CloseButton
+    @include ButtonOverride
+    @include WhiteBlock
+    @include TwitchOnHover
+    float: right
+    border: 2px solid white
+    
+  h2 svg
+    vertical-align: middle
+    margin-right: 10px
+
+  .CopyInput
+    width: 100%
