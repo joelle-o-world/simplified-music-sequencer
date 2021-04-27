@@ -1,7 +1,7 @@
 import React, {FunctionComponent, } from 'react';
 import {IoIosSave, IoIosClose} from 'react-icons/io';
 import {useSelector, useDispatch} from 'react-redux';
-import {selectSharing, hideUploadForm, showUploadForm} from './sharingSlice';
+import {selectSharing, hideUploadForm} from './sharingSlice';
 import {selectSequencer, setComposer, setTitle, publish} from '../sequencer/sequencerSlice';
 
 export const UploadForm: FunctionComponent = () => {
@@ -71,7 +71,7 @@ function scrollToSharedSequencesList() {
 
 export const UploadButton: FunctionComponent = () => {
   const dispatch = useDispatch();
-  const sharing = useSelector(selectSharing);
+  //const sharing = useSelector(selectSharing);
   const sequencer = useSelector(selectSequencer);
   return <button 
     className="SequencerUploadButton" 

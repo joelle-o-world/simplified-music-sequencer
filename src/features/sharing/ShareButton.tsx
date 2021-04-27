@@ -24,7 +24,7 @@ export const ShareDialog: FunctionComponent = () => {
   if(!sharing.sequenceToShare || !sharing.showingShareDialog)
     return null
 
-  const [link] = window.location.href.split(/\?|\#/)
+  const [link] = window.location.href.split(/\?|#/)
   const url = `${link}?sequence=${
     encodeURIComponent(sharing.sequenceToShare)
   }`;

@@ -13,7 +13,7 @@ export const DialogBox: FunctionComponent<{
   return <div 
     className={classNames("DialogBoxWrapper", {darkBg})} 
     onClick={e => {
-      if(e.target == e.currentTarget && onBGClick)
+      if(e.target === e.currentTarget && onBGClick)
         onBGClick()
     }}>
     {above}

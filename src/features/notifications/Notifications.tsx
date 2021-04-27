@@ -1,5 +1,4 @@
-
-import React, {FunctionComponent, useEffect, useState} from 'react';
+import React, {FunctionComponent, useEffect} from 'react';
 import {useSelector, useDispatch, } from 'react-redux';
 import {NotificationObject, selectNotifications, dismissNotification} from './notificationsSlice';
 
@@ -27,7 +26,7 @@ export const Notification:FunctionComponent<NotificationObject> = ({isError, dis
       let timeout = setTimeout(() => dispatch(dismissNotification(id)), 5000)
       return () => clearTimeout(timeout);
     }
-  }, [dismissed]);
+  }, [dismissed, dispatch, id]);
 
   return <div className={classNames('Notification', {dismissed, isError})}>
     <button className="DismissNotification" onClick={() => dispatch(dismissNotification(id))}><IoClose/></button>

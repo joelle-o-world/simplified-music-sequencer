@@ -67,7 +67,7 @@ export class Synth extends EventEmitter {
 let persistantSynth: Synth;
 const getPersistantSynth = () => {
   if(!persistantSynth)
-    persistantSynth = new Synth;
+    persistantSynth = new Synth();
   return persistantSynth
 }
 

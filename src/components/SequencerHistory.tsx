@@ -16,7 +16,7 @@ export const SequencerHistory:FunctionComponent = () => (
 
     <section>
       <figure className="float-left" style={{maxWidth: "700px"}}>
-        <img src={AllahsAutomata} />
+        <img src={AllahsAutomata} alt="A modern day reconstruction of the Banū Mūsā musical automaton." />
         <figcaption className="insetOnFigure">A modern day reconstruction of the Banū Mūsā musical automaton.</figcaption>
       </figure>
       <h2>{"بنو موسى"}<br/>{"(Banū Mūsā)"}</h2>
@@ -25,7 +25,7 @@ export const SequencerHistory:FunctionComponent = () => (
 
     <section>
       <figure className="float-right">
-        <img src={AmyBeechManuscript}  />
+        <img src={AmyBeechManuscript} alt="A Hermit Thrush at Morn by Amy Beech" />
         <figcaption className="insetOnFigure">
         <a href="https://www.youtube.com/watch?v=Nffsdey4jis" target="_blank">A Hermit Thrush at Morn</a> by <a href="https://www.bbc.co.uk/sounds/play/p07836kk" target="_blank">Amy Beach</a></figcaption>
       </figure>
@@ -50,7 +50,7 @@ export const SequencerHistory:FunctionComponent = () => (
       </figure>
       <p><strong>Music boxes</strong> are small clockwork devices which became popular about 200 years ago. In Europe, they evolved from 13th century mechanisms for ringing the bells in Dutch churches. They work in a similar way to the Banū Mūsā machine: The notes are triggered by little bumps (called cams) on a spinning wheel.</p> 
       <figure className="float-right">
-        <img src={Camshaft} />
+        <img src={Camshaft} alt="a camshaft from a car engine"/>
         <figcaption className="insetOnFigure">The camshaft from a car engine works like the rotating sequencer in a music box</figcaption>
       </figure>
       <p>A similar system is used to control all the rhythms inside a car engine. A long metal part called the camshaft is covered in carefully positioned bumps. These bumps push levers so that the engine works with perfect timing, even at high speed.</p>
@@ -59,7 +59,7 @@ export const SequencerHistory:FunctionComponent = () => (
 
     <section>
       <figure className="float-right">
-        <img src={Pianola} />
+        <img src={Pianola} alt="a pianola brochure in 1903" />
         <figcaption className="insetOnFigure">A photo from a pianola brochure in 1903</figcaption>
       </figure>
       <h2>Self Playing Pianos</h2>
@@ -67,7 +67,7 @@ export const SequencerHistory:FunctionComponent = () => (
     </section>
     <section>
       <figure className="float-left">
-        <img src={RaymondScott} />
+        <img src={RaymondScott} alt="Raymond Scott with some of his machines"/>
         <figcaption className="insetOnFigure">Raymond Scott with some of his machines</figcaption>
       </figure>
       <h2>Early Electronic Sequencers</h2>
@@ -76,7 +76,7 @@ export const SequencerHistory:FunctionComponent = () => (
     
     <section>
       <figure className="float-right">
-        <img src={SIDChip} />
+        <img src={SIDChip} alt="A MOS 6581 SID chip" />
         <figcaption>A MOS 6581 SID chip. About the size of your fingernail, this chip is a whole musical instrument!</figcaption>
       </figure>
       <h2>Microchips and video games</h2>
@@ -84,7 +84,7 @@ export const SequencerHistory:FunctionComponent = () => (
     </section>
     <section>
       <figure className="float-right">
-        <img src={MidiPicnic} />
+        <img src={MidiPicnic} alt="" />
       </figure>
       <h2>MIDI in the 1980s</h2>
       <p>By the 1980s electronic musical instruments were being being mass produced. In 1982, engineers from around the world got to together to create MIDI: a standardised way to send musical instructions through an electrical cable. For the first time computers, sequencers and synthesisers could all speak to one another in a common language.</p> 

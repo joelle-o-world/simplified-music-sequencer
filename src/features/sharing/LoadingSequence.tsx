@@ -1,6 +1,6 @@
 import React from 'react';
 import {FunctionComponent} from 'react';
-import {IoEgg, IoTimer, IoHourglass, IoHourglassSharp} from 'react-icons/io5';
+import {IoHourglassSharp} from 'react-icons/io5';
 
 export const LoadingSequence: FunctionComponent = () => {
   return <div className="LoadingSequence">

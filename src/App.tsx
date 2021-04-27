@@ -8,7 +8,7 @@ import {openSequence} from './features/sharing/sharingSlice';
 import {useDispatch} from 'react-redux';
 
 function getParameterByName(name:string, url = window.location.href) {
-    name = name.replace(/[\[\]]/g, '\\$&');
+    name = name.replace(/[[\]]/g, '\\$&');
     var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
         results = regex.exec(url);
     if (!results) return null;
@@ -26,12 +26,12 @@ function App() {
       dispatch(openSequence(sequenceToLoad));
       setPage('main');
     }
-  }, []);
+  }, [dispatch]);
 
-  const heading = <hgroup className="MainPageHeader">
-    <h1>Musical Sequencing</h1>
-    <h2>Programming a tune using the computer</h2>
-  </hgroup>
+  //const heading = <hgroup className="MainPageHeader">
+    //<h1>Musical Sequencing</h1>
+    //<h2>Programming a tune using the computer</h2>
+  //</hgroup>
 
   if(page === 'chooseName')
     return <div className="App">
