@@ -17,6 +17,7 @@ import {useElementPosition} from '../../hooks/useElementPosition';
 
 import {cssPitchClassNames} from './PitchInput'
 import {parseDrum} from '../synth/drums';
+import {DrumSelector} from './DrumSelector';
 
 // NOTE: All properties added in future versions should be optional for backwards compatibility.
 export interface StepParse {
@@ -138,6 +139,12 @@ export const SequencerStepInput: FunctionComponent<PitchInputProps> = ({
             } }
             highlightKeys={internalParse.midiNumber ? [internalParse.midiNumber] : [] }
             labelKeys
+          />
+          <DrumSelector
+            onSelect={(sampleName) => {
+              playDrums([sampleName]);
+              handleChange(sampleName);
+            }}
           />
         </span>
       : null}

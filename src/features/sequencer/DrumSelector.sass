@@ -1,0 +1,15 @@
+@use '../../shared' as *
+
+.DrumSelector
+  position: sticky
+  left: 0px
+  right: 0px
+  max-width: 100%
+  box-sizing: border-box
+  z-index: 100
+  .DrumSelectorButton
+    @include ButtonOverride
+    min-width: 70px
+    height: 70px
+    background-color: #ccc
+    color: black

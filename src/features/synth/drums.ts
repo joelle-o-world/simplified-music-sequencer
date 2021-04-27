@@ -7,7 +7,16 @@ import tom from './drum-samples/Tom-909-Hi.aif.mp3';
 import cowbell from './drum-samples/Cowbell-808.aif.mp3';
 import shaker from './drum-samples/Maracas-808.aif.mp3';
 
-const audioFiles: {[name:string]: string} = { clap, kick, bongo, snare, hihat, tom, cowbell, shaker }
+const audioFiles: {[name:string]: string} = { 
+  kick,
+  clap, 
+  snare, 
+  hihat, 
+  tom, 
+  bongo, 
+  cowbell, 
+  shaker ,
+}
 
 export const drumSampleNames = Object.keys(audioFiles);
 
